@@ -33,7 +33,7 @@ COPY --from=vendor /app/resources/js /app/resources/js
 COPY --from=vendor /app/resources/css /app/resources/css
 COPY --from=vendor /app/public /app/public
 COPY --from=vendor /app/vite.config.ts /app/tsconfig.json /app/components.json /app/
-RUN npm run build
+RUN WAYFINDER_GENERATE=false npm run build
 
 FROM php:8.3-apache-bookworm
 WORKDIR /var/www/html

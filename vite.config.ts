@@ -7,6 +7,14 @@ import { bunny } from 'laravel-vite-plugin/fonts';
 import { defineConfig } from 'vite';
 import { compression } from 'vite-plugin-compression2';
 
+const wayfinderPlugin = process.env.WAYFINDER_GENERATE === 'false'
+    ? []
+    : [
+          wayfinder({
+              formVariants: true,
+          }),
+      ];
+
 export default defineConfig({
     plugins: [
         laravel({
@@ -29,9 +37,7 @@ export default defineConfig({
             },
         }),
         tailwindcss(),
-        wayfinder({
-            formVariants: true,
-        }),
+        ...wayfinderPlugin,
         // Add Gzip and Brotli compression
         compression({ algorithm: 'gzip', exclude: [/\.(br)$/, /\.(gz)$/] }),
         compression({ algorithm: 'brotliCompress', exclude: [/\.(br)$/, /\.(gz)$/] }),
