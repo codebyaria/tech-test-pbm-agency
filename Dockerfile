@@ -23,6 +23,12 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
     && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
 COPY package.json package-lock.json ./
 RUN npm ci
+COPY --from=vendor /app/artisan /app/artisan
+COPY --from=vendor /app/bootstrap /app/bootstrap
+COPY --from=vendor /app/config /app/config
+COPY --from=vendor /app/routes /app/routes
+COPY --from=vendor /app/app /app/app
+COPY --from=vendor /app/database /app/database
 COPY --from=vendor /app/resources/js /app/resources/js
 COPY --from=vendor /app/resources/css /app/resources/css
 COPY --from=vendor /app/public /app/public
