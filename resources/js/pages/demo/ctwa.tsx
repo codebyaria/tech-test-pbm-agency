@@ -20,7 +20,7 @@ const FLASH_WINDOW_MS = 12 * 60 * 60 * 1000;
 function flashDeadline(): number {
     let start = Number(localStorage.getItem('fb_flash_start') || 0);
 
-    if (!start) {
+    if (!start || start + FLASH_WINDOW_MS <= Date.now()) {
         start = Date.now();
 
         try {
@@ -151,8 +151,8 @@ function css(decl: string): CSSProperties {
     return out as CSSProperties;
 }
 
-const navStyle = (scrolled: boolean, bannerH: number): string =>
-    `position:sticky;top:${bannerH}px;z-index:50;transition:all 0.3s;border-bottom:1px solid #f3f4f6;` +
+const navStyle = (scrolled: boolean): string =>
+    'transition:all 0.3s;border-bottom:1px solid #f3f4f6;' +
     (scrolled
         ? 'background:rgba(255,255,255,0.95);box-shadow:0 4px 12px rgba(0,0,0,0.08);backdrop-filter:blur(8px);'
         : 'background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.05);');
@@ -226,11 +226,13 @@ export default function LandingPage() {
     const [rpSelected, setRpSelected] = useState<number | null>(null);
     const [waBubbleOpen, setWaBubbleOpen] = useState<boolean>(false);
     const [showOverlay, setShowOverlay] = useState<boolean>(true);
+    const [showLmsOverlay, setShowLmsOverlay] = useState<boolean>(true);
     const [countdown, setCountdown] = useState<string>('12:00:00');
     const [flashVisible, setFlashVisible] = useState<boolean>(true);
 
     const bannerRef = useRef<HTMLAnchorElement | null>(null);
     const videoRef = useRef<HTMLVideoElement | null>(null);
+    const lmsVideoRef = useRef<HTMLVideoElement | null>(null);
 
     /* flash-sale countdown, per visitor, persisted in localStorage */
     useEffect(() => {
@@ -386,6 +388,33 @@ export default function LandingPage() {
             void videoRef.current.play();
         }
     }, []);
+    const playLmsVideo = useCallback((): void => {
+        if (lmsVideoRef.current?.paused) {
+            void lmsVideoRef.current.play();
+        }
+    }, []);
+    const scrollToPricing = useCallback(
+        (event: React.MouseEvent<HTMLAnchorElement>): void => {
+            const pricing = document.getElementById('pricing');
+
+            if (!pricing) {
+                return;
+            }
+
+            event.preventDefault();
+            window.history.replaceState(null, '', '#pricing');
+
+            const bannerHeight =
+                bannerRef.current?.getBoundingClientRect().height ?? bannerH;
+            const targetY =
+                pricing.getBoundingClientRect().top +
+                window.scrollY -
+                bannerHeight;
+
+            window.scrollTo({ top: Math.max(0, targetY), behavior: 'auto' });
+        },
+        [bannerH],
+    );
     const dismissWaBubble = useCallback((): void => {
         setWaBubbleOpen(false);
 
@@ -449,44 +478,43 @@ export default function LandingPage() {
             <style>{KEYFRAMES}</style>
 
             <div className="[min-height:100vh] [width:100%] [max-width:100%] [min-width:0] [overflow-x:clip] [font-family:Nunito,system-ui,sans-serif] [background:#fff]">
-                {/* Urgency Banner */}
-                {flashVisible ? (
-                    <>
+                {/* Fixed sale banner + navigation */}
+                <div className="[position:fixed] [top:0] [right:0] [left:0] [z-index:50]">
+                    {flashVisible ? (
                         <a
                             ref={bannerRef}
                             id="urgency-banner"
                             href="#pricing"
-                            className="[position:sticky] [top:0] [z-index:51] [box-sizing:border-box] [display:flex] [width:100%] [max-width:100%] [flex-wrap:nowrap] [align-items:center] [justify-content:center] [gap:8px] [overflow:hidden] [padding:8px_12px] [text-align:center] [white-space:nowrap] [background:#C10707] [text-decoration:none] max-[639px]:[padding:10px_12px]"
+                            onClick={scrollToPricing}
+                            className="[box-sizing:border-box] [display:flex] [width:100%] [max-width:100%] [flex-wrap:nowrap] [align-items:center] [justify-content:center] [gap:8px] [overflow:hidden] [padding:8px_12px] [text-align:center] [white-space:nowrap] [background:#C10707] [text-decoration:none] max-[500px]:[padding:10px_12px]"
                         >
                             <span
                                 id="banner-full"
-                                className="[font-size:13px] [line-height:1.4] [font-weight:800] [letter-spacing:0.02em] [color:#fff] [text-transform:uppercase] max-[639px]:[display:none]"
+                                className="[font-size:13px] [line-height:1.4] [font-weight:800] [letter-spacing:0.02em] [color:#fff] [text-transform:uppercase] max-[500px]:[display:none]"
                             >
                                 🔥 FLASH SALE SEPTEMBER · DISKON 60%
                             </span>
                             <span
                                 id="banner-short"
-                                className="[display:none] [font-size:11px] [line-height:1.4] [font-weight:800] [letter-spacing:0.01em] [color:#fff] [text-transform:uppercase] max-[639px]:[display:inline] max-[639px]:[font-size:12.5px]"
+                                className="[display:none] [font-size:11px] [line-height:1.4] [font-weight:800] [letter-spacing:0.01em] [color:#fff] [text-transform:uppercase] max-[500px]:[display:inline] max-[500px]:[font-size:12.5px]"
                             >
                                 🔥 FLASH SALE SEPTEMBER · 60%
                             </span>
                             <span className="[display:inline-flex] [flex-shrink:0] [align-items:center] [gap:5px] [border-radius:9999px] [padding:3px_10px] [line-height:1.2] [color:#C10707] [background:#fff]">
                                 <span
                                     id="banner-timer-label"
-                                    className="[font-size:11px] [font-weight:800] [letter-spacing:0.04em] [text-transform:uppercase] max-[639px]:[display:none]"
+                                    className="[font-size:11px] [font-weight:800] [letter-spacing:0.04em] [text-transform:uppercase] max-[500px]:[display:none]"
                                 >
                                     ⏱ Berakhir
                                 </span>
-                                <span className="[font-size:13px] [font-weight:900] [letter-spacing:0.04em] [font-variant-numeric:tabular-nums] max-[639px]:[font-size:14px]">
+                                <span className="[font-size:13px] [font-weight:900] [letter-spacing:0.04em] [font-variant-numeric:tabular-nums] max-[500px]:[font-size:14px]">
                                     {countdown}
                                 </span>
                             </span>
                         </a>
-                    </>
-                ) : null}
+                    ) : null}
 
-                {/* Navbar */}
-                <header style={css(navStyle(scrolled, bannerH))}>
+                    <header style={css(navStyle(scrolled))}>
                     <div className="[margin:0_auto] [box-sizing:border-box] [display:flex] [height:64px] [width:100%] [max-width:1152px] [min-width:0] [align-items:center] [justify-content:space-between] [padding:0_24px]">
                         <a
                             href="#"
@@ -503,6 +531,7 @@ export default function LandingPage() {
                             action="scroll"
                             label="Amankan Seat"
                             href="#pricing"
+                            onClick={scrollToPricing}
                             className="[display:flex] [flex-direction:column] [justify-content:center] [gap:1px] [border-radius:9999px] [padding:7px_16px] [box-shadow:0_6px_16px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none]"
                         >
                             <span className="[font-size:13px] [line-height:1.2] [font-weight:800] [white-space:nowrap] [color:#fff]">
@@ -521,7 +550,9 @@ export default function LandingPage() {
                             </span>
                         </TrackedCTA>
                     </div>
-                </header>
+                    </header>
+                </div>
+                <div style={{ height: bannerH + 64 }} aria-hidden="true"></div>
 
                 {/* Hero */}
                 <section
@@ -535,7 +566,7 @@ export default function LandingPage() {
                         id="hero-section-inner"
                         className="[position:relative] [margin:0_auto] [box-sizing:border-box] [display:grid] [width:100%] [max-width:1152px] [min-width:0] [grid-template-columns:1fr] [gap:40px] [padding:40px_24px_16px] max-[639px]:[gap:24px] max-[639px]:[padding-top:24px] max-[639px]:[padding-bottom:8px]"
                     >
-                        <div className="[display:grid] [min-width:0] [grid-template-columns:1.05fr_0.95fr] [align-items:center] [gap:40px] max-[899px]:[position:relative] max-[899px]:[grid-template-columns:1fr] max-[899px]:[gap:24px]">
+                        <div className="[display:grid] [min-width:0] [grid-template-columns:1.05fr_0.95fr] [align-items:center] [gap:40px] max-[899px]:[position:relative] max-[899px]:[grid-template-columns:1fr] max-[899px]:[gap:12px]">
                             <div className="[position:relative] [z-index:1] [grid-column:1] [display:flex] [min-width:0] [flex-direction:column] [gap:16px]">
                                 <div
                                     id="hero-rating-badge"
@@ -623,7 +654,8 @@ export default function LandingPage() {
                                             action="scroll"
                                             label="Mulai Persiapan TOEFL"
                                             href="#pricing"
-                                            className="[display:inline-flex] [max-width:100%] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:34px_76px] [font-size:27px] [font-weight:700] [color:#fff] [box-shadow:0_4px_20px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none] max-[639px]:[box-sizing:border-box] max-[639px]:[width:100%] max-[639px]:[padding:clamp(10px,3vw,14px)_clamp(16px,5vw,28px)] max-[639px]:[font-size:clamp(12px,3.6vw,16px)]"
+                                            onClick={scrollToPricing}
+                                            className="[display:inline-flex] [max-width:100%] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:14px_28px] [font-size:16px] [font-weight:700] [color:#fff] [box-shadow:0_4px_20px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none] hover:[color:#fff] focus:[color:#fff] active:[color:#fff] max-[500px]:[box-sizing:border-box] max-[500px]:[width:100%] max-[500px]:[padding:clamp(10px,3vw,14px)_clamp(16px,5vw,28px)] max-[500px]:[font-size:clamp(12px,3.6vw,16px)]"
                                             style={{ color: '#fff' }}
                                         >
                                             Mulai Persiapan TOEFL →
@@ -662,12 +694,15 @@ export default function LandingPage() {
                                 </div>
                             </div>
 
-                            <div className="[grid-column:2] [display:flex] [align-items:flex-end] [justify-content:center] max-[899px]:[grid-column:1] max-[899px]:[display:none]">
-                                <div className="[position:relative] [display:flex] [width:100%] [max-width:560px] [align-items:flex-end] [justify-content:center] [align-self:stretch] max-[899px]:[width:230px] max-[899px]:[max-width:initial] max-[899px]:[align-items:flex-start] max-[899px]:[justify-content:flex-end] max-[899px]:[align-self:initial]">
+                            <div className="[grid-column:2] [display:flex] [align-items:flex-end] [justify-content:center] max-[899px]:[grid-column:1] max-[899px]:[margin-top:-4px]">
+                                <div className="[position:relative] [display:flex] [width:100%] [max-width:560px] [align-items:flex-end] [justify-content:center] [align-self:stretch] max-[899px]:[max-width:250px] max-[899px]:[align-self:initial]">
                                     <img
                                         src="/assets/hero-consultant.png"
                                         alt="Konsultan Full Bright Indonesia siap membantu persiapan TOEFL kamu"
-                                        className="[display:block] [height:auto] [max-height:min(72vh,660px)] [width:100%] [mask-image:linear-gradient(to_bottom,#000_0%,#000_78%,rgba(0,0,0,0.5)_92%,transparent_100%)] [object-fit:contain] [object-position:bottom_center] [filter:drop-shadow(0_18px_40px_rgba(0,0,0,0.16))] [-webkit-mask-image:linear-gradient(to_bottom,#000_0%,#000_78%,rgba(0,0,0,0.5)_92%,transparent_100%)] max-[899px]:[max-height:initial] max-[899px]:[mask-image:linear-gradient(to_left,#000_40%,transparent_100%)] max-[899px]:[object-position:top_center] max-[899px]:[opacity:0.24] max-[899px]:[filter:initial] max-[899px]:[-webkit-mask-image:linear-gradient(to_left,#000_40%,transparent_100%)]"
+                                        width="820"
+                                        height="1000"
+                                        fetchPriority="high"
+                                        className="[display:block] [height:auto] [max-height:min(72vh,660px)] [width:100%] [mask-image:linear-gradient(to_bottom,#000_0%,#000_78%,rgba(0,0,0,0.5)_92%,transparent_100%)] [object-fit:contain] [object-position:bottom_center] [filter:drop-shadow(0_18px_40px_rgba(0,0,0,0.16))] [-webkit-mask-image:linear-gradient(to_bottom,#000_0%,#000_78%,rgba(0,0,0,0.5)_92%,transparent_100%)] max-[899px]:[max-height:min(28vh,215px)] max-[899px]:[filter:drop-shadow(0_12px_28px_rgba(0,0,0,0.14))]"
                                     />
                                     <div className="hidden min-[900px]:contents">
                                         <div className="[position:absolute] [bottom:18px] [left:0] [display:flex] [max-width:216px] [align-items:center] [gap:10px] [border-radius:16px] [padding:11px_14px] [box-shadow:0_8px_32px_rgba(0,0,0,0.14)] [background:#fff]">
@@ -872,7 +907,7 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        <h2 className="[margin:0_0_20px] [text-align:center] [font-family:Nunito,sans-serif] [font-size:clamp(40px,6.4vw,68px)] [line-height:1.2] [font-weight:900] [color:#151515]">
+                        <h2 className="[margin:0_0_20px] [text-align:center] [font-family:Nunito,sans-serif] [font-size:clamp(28px,3.6vw,42px)] [line-height:1.2] [font-weight:900] [color:#151515]">
                             Sudah Banyak Belajar,
                             <br />
                             <span className="[color:#D70808]">
@@ -1311,6 +1346,7 @@ export default function LandingPage() {
                                 action="scroll"
                                 label="Gabung Sekarang"
                                 href="#pricing"
+                                onClick={scrollToPricing}
                                 className="[display:inline-flex] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:14px_28px] [font-size:16px] [font-weight:700] [color:#fff] [box-shadow:0_4px_20px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none]"
                             >
                                 Gabung Sekarang →
@@ -1413,6 +1449,7 @@ export default function LandingPage() {
                                 action="scroll"
                                 label="Gabung Sekarang"
                                 href="#pricing"
+                                onClick={scrollToPricing}
                                 className="[display:inline-flex] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:14px_28px] [font-size:16px] [font-weight:700] [color:#fff] [box-shadow:0_4px_20px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none]"
                             >
                                 Gabung Sekarang →
@@ -1470,23 +1507,45 @@ export default function LandingPage() {
                         </p>
                     </div>
 
-                    <div className="[margin:0_auto_44px] [max-width:840px]">
-                        <div className="[position:relative] [aspect-ratio:16/9] [overflow:hidden] [border-radius:20px] [box-shadow:0_8px_32px_rgba(0,0,0,0.12)] [background:#151515] [border:1px_solid_#e5e5e5]">
-                            <div className="[position:absolute] [inset:0] [display:flex] [flex-direction:column] [align-items:center] [justify-content:center] [gap:14px] [background:repeating-linear-gradient(135deg,#1c1c1c_0,#1c1c1c_14px,#191919_14px,#191919_28px)]">
-                                <span className="[display:flex] [height:66px] [width:66px] [align-items:center] [justify-content:center] [border-radius:9999px] [box-shadow:0_8px_26px_rgba(215,8,8,0.45)] [background:#D70808]">
-                                    <span className="[margin-left:5px] [display:block] [height:0] [width:0] [border-width:13px_0_13px_21px] [border-style:solid] [border-color:transparent_transparent_transparent_#fff]"></span>
-                                </span>
-                                <p className="[margin:0] [font-family:Nunito,sans-serif] [font-size:14px] [font-weight:800] [color:#fff]">
-                                    Video Tour LMS
-                                </p>
-                            </div>
-                            <div className="[pointer-events:none] [position:absolute] [top:14px] [left:14px] [display:flex] [align-items:center] [gap:7px] [border-radius:9999px] [padding:7px_13px] [background:rgba(0,0,0,0.55)]">
-                                <span className="[display:block] [height:7px] [width:7px] [border-radius:9999px] [background:#D70808]"></span>
-                                <span className="[font-size:11px] [font-weight:900] [letter-spacing:0.08em] [color:#fff] [text-transform:uppercase]">
-                                    Showcase
-                                </span>
-                            </div>
-                        </div>
+                    <div className="[position:relative] [margin:0_auto_40px] [max-width:1040px] [overflow:hidden] [border-radius:18px] [line-height:0] [box-shadow:0_8px_28px_rgba(0,0,0,0.18)] [background:#151515]">
+                        <video
+                            ref={lmsVideoRef}
+                            controls
+                            preload="metadata"
+                            playsInline
+                            onPlay={() => setShowLmsOverlay(false)}
+                            className="[display:block] [aspect-ratio:16/9] [width:100%] [object-fit:cover] [background:#151515]"
+                        >
+                            <source
+                                src="https://demo-fullbright.b-cdn.net/NEW.mp4#t=4"
+                                type="video/mp4"
+                            />
+                            Browser kamu tidak mendukung pemutaran video.
+                        </video>
+                        {showLmsOverlay ? (
+                            <button
+                                type="button"
+                                aria-label="Putar video tampilan LMS"
+                                onClick={playLmsVideo}
+                                className="[position:absolute] [inset:0] [display:flex] [cursor:pointer] [align-items:center] [justify-content:center] [background:rgba(21,21,21,0.22)] [border:0] [transition:background_0.2s_ease] hover:[background:rgba(21,21,21,0.32)]"
+                            >
+                                <div className="[position:absolute] [inset:0] [display:flex] [flex-direction:column] [align-items:center] [justify-content:center] [gap:14px] [background:rgba(21,21,21,0.35)]">
+                                    <span className="[display:flex] [height:76px] [width:76px] [align-items:center] [justify-content:center] [border-radius:9999px] [box-shadow:0_8px_28px_rgba(215,8,8,0.5)] [background:#D70808]">
+                                        <svg
+                                            width="30"
+                                            height="30"
+                                            viewBox="0 0 24 24"
+                                            fill="#fff"
+                                        >
+                                            <path d="M8 5.5v13l11-6.5z"></path>
+                                        </svg>
+                                    </span>
+                                    <span className="[font-family:Nunito,sans-serif] [font-size:13px] [font-weight:800] [color:#fff] [text-shadow:0_2px_8px_rgba(0,0,0,0.4)]">
+                                        Putar showcase LMS
+                                    </span>
+                                </div>
+                            </button>
+                        ) : null}
                     </div>
 
                     <div className="[margin:0_auto_40px] [display:flex] [max-width:1040px] [flex-direction:column] [gap:20px]">
@@ -1892,6 +1951,7 @@ export default function LandingPage() {
                                 action="scroll"
                                 label="Gabung Sekarang"
                                 href="#pricing"
+                                onClick={scrollToPricing}
                                 className="[display:inline-flex] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:14px_28px] [font-size:16px] [font-weight:700] [color:#fff] [box-shadow:0_4px_20px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none]"
                             >
                                 Gabung Sekarang →
@@ -2028,6 +2088,7 @@ export default function LandingPage() {
                                 action="scroll"
                                 label="Gabung Sekarang"
                                 href="#pricing"
+                                onClick={scrollToPricing}
                                 className="[display:inline-flex] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:30px_64px] [font-size:24px] [font-weight:700] [color:#fff] [box-shadow:0_4px_20px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none]"
                             >
                                 Gabung Sekarang →
@@ -2857,6 +2918,7 @@ export default function LandingPage() {
                                 action="scroll"
                                 label="Gabung Sekarang"
                                 href="#pricing"
+                                onClick={scrollToPricing}
                                 className="[display:inline-flex] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:14px_28px] [font-size:16px] [font-weight:700] [color:#fff] [box-shadow:0_4px_20px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none]"
                             >
                                 Gabung Sekarang →
@@ -3204,7 +3266,7 @@ export default function LandingPage() {
             {mode === 'tutor' ? (
                 <>
                     <section
-                        id="pricing"
+                        id="pricing-tutor"
                         className="[padding:80px_24px_48px] [background:#fff]"
                     >
                         <div className="[margin:0_auto] [max-width:1152px]">
@@ -4713,7 +4775,7 @@ export default function LandingPage() {
                         <p className="[margin:0_0_6px] [text-align:right] [font-size:11px] [font-weight:700] [letter-spacing:0.06em] [color:#6b6b6b] [text-transform:uppercase]">
                             BOLEH TAHU KESULITANMU?
                         </p>
-                        <h2 className="[margin:0] [font-family:Nunito,sans-serif] [font-size:clamp(28px,5.6vw,38px)] [line-height:1.25] [font-weight:800] [color:#151515]">
+                        <h2 className="[margin:0] [font-family:Nunito,sans-serif] [font-size:clamp(20px,3.6vw,23px)] [line-height:1.25] [font-weight:800] [color:#151515]">
                             Apa Tantangan Terbesarmu{' '}
                             <span className="[color:#D70808]">
                                 Soal TOEFL Sekarang?
@@ -4860,6 +4922,7 @@ export default function LandingPage() {
                                 <li>
                                     <a
                                         href="#pricing"
+                                        onClick={scrollToPricing}
                                         className="[font-size:14px] [color:#9ca3af] [text-decoration:none]"
                                     >
                                         Harga
@@ -5088,7 +5151,7 @@ export default function LandingPage() {
             ) : null}
 
             {/* Floating WhatsApp */}
-            <div className="[position:fixed] [right:20px] [bottom:20px] [z-index:52] [display:flex] [flex-direction:column] [align-items:flex-end] [gap:10px]">
+            <div className="[position:fixed] [right:48px] [bottom:20px] [z-index:52] [display:flex] [flex-direction:column] [align-items:flex-end] [gap:10px] max-[500px]:[right:20px]">
                 {waBubbleOpen ? (
                     <>
                         <div className="[position:relative] [max-width:270px] [border-radius:18px_18px_6px_18px] [padding:14px_16px_14px_14px] [box-shadow:0_10px_34px_rgba(0,0,0,0.18)] [background:#fff] [border:1px_solid_#e5e7eb] max-[559px]:[max-width:208px] max-[559px]:[border-radius:14px_14px_5px_14px] max-[559px]:[padding:10px_12px_10px_11px]">
@@ -5115,7 +5178,7 @@ export default function LandingPage() {
                                 />
                                 <span className="[display:block]">
                                     <span className="[margin-bottom:3px] [display:block] [font-family:Nunito,sans-serif] [font-size:12px] [font-weight:900] [color:#151515] max-[559px]:[margin-bottom:2px] max-[559px]:[font-size:10px]">
-                                        Mr. Choiri - Admin Full Bright
+                                        Ms. Fini - Admin Full Bright
                                     </span>
                                     <span className="[display:block] [font-size:13px] [line-height:1.5] [font-weight:600] [color:#3d3d3d]">
                                         Masih bingung atau ragu? Tanya langsung
