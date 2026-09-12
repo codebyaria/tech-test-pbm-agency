@@ -35,7 +35,7 @@ COPY --from=vendor /app/public /app/public
 COPY --from=vendor /app/vite.config.ts /app/tsconfig.json /app/components.json /app/
 RUN WAYFINDER_GENERATE=false npm run build
 
-FROM php:8.3-apache-bookworm
+FROM php:8.4-apache-bookworm
 WORKDIR /var/www/html
 
 RUN apt-get update \
