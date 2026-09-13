@@ -3053,7 +3053,7 @@ export default function LandingPage() {
                                     👇 Pilih Cara Belajarmu
                                 </p>
 
-                                <div className="[display:inline-flex] [gap:4px] [border-radius:9999px] [padding:5px] [box-shadow:0_2px_12px_rgba(215,8,8,0.08)] [background:#fff] [border:1px_solid_#ffb3b3]">
+                                <div className="[display:flex] [flex-wrap:wrap] [justify-content:center] [gap:4px] [border-radius:9999px] [padding:5px] [max-width:340px] [margin:0_auto] [box-shadow:0_2px_12px_rgba(215,8,8,0.08)] [background:#fff] [border:1px_solid_#ffb3b3]">
                                     <button
                                         onClick={() => setMode('self')}
                                         style={css(toggleBtnStyle(true))}
@@ -3062,10 +3062,11 @@ export default function LandingPage() {
                                     </button>
                                     <button
                                         onClick={() => setMode('tutor')}
+                                        className="[position:relative]"
                                         style={css(toggleBtnStyle(false))}
                                     >
                                         Dibimbing Tutor
-                                        <span className="[position:absolute] [top:-9px] [right:-6px] [display:flex] [height:34px] [width:34px] [align-items:center] [justify-content:center] [border-radius:9999px] [font-size:11px] [font-weight:900] [color:#fff] [box-shadow:0_2px_8px_rgba(249,115,22,0.4)] [background:#F97316] [border:2px_solid_#fff]">
+                                        <span className="[position:absolute] [top:-9px] [right:-6px] [display:flex] [height:28px] [width:28px] [align-items:center] [justify-content:center] [border-radius:9999px] [font-size:10px] [font-weight:900] [color:#fff] [box-shadow:0_2px_8px_rgba(249,115,22,0.4)] [background:#F97316] [border:2px_solid_fff] max-[639px]:[height:24px] max-[639px]:[width:24px] max-[639px]:[font-size:9px] max-[639px]:[right:-4px] max-[639px]:[top:-7px]">
                                             -80%
                                         </span>
                                     </button>
