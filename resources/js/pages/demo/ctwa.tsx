@@ -254,7 +254,7 @@ export default function LandingPage() {
     const [surveySelected, setSurveySelected] = useState<number | null>(null);
     const [rpOpen, setRpOpen] = useState<boolean>(false);
     const [rpSelected, setRpSelected] = useState<number | null>(null);
-    const [waBubbleOpen, setWaBubbleOpen] = useState<boolean>(false);
+    const [waBubbleOpen, setWaBubbleOpen] = useState<boolean>(true);
     const [showOverlay, setShowOverlay] = useState<boolean>(true);
     const [showLmsOverlay, setShowLmsOverlay] = useState<boolean>(true);
     const [countdown, setCountdown] = useState<string>('12:00:00');
