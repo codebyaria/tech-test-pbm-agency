@@ -13,6 +13,45 @@ import { TrackedCTA } from '@/components/tracking/TrackedCTA';
 const WA_NUMBER = '6285255499299';
 const waUrl = (text: string): string =>
     `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+const UNIVERSITY_LOGOS = [
+    {
+        src: 'https://toefl.fullbrightindonesia.org/assets/logos/ui.png',
+        alt: 'Universitas Indonesia',
+    },
+    {
+        src: 'https://toefl.fullbrightindonesia.org/assets/logos/itb.png',
+        alt: 'Institut Teknologi Bandung',
+    },
+    {
+        src: 'https://toefl.fullbrightindonesia.org/assets/logos/ugm.webp',
+        alt: 'Universitas Gadjah Mada',
+    },
+    {
+        src: 'https://toefl.fullbrightindonesia.org/assets/logos/ipb.png',
+        alt: 'IPB University',
+    },
+    { src: '/assets/unair.png', alt: 'Universitas Airlangga' },
+    {
+        src: 'https://www.unpad.ac.id/wp-content/uploads/2025/12/logo-unpad-duo.svg',
+        alt: 'Universitas Padjadjaran',
+    },
+    {
+        src: 'https://toefl.fullbrightindonesia.org/assets/logos/its.png',
+        alt: 'Institut Teknologi Sepuluh Nopember',
+    },
+    {
+        src: 'https://toefl.fullbrightindonesia.org/assets/logos/undip.png',
+        alt: 'Universitas Diponegoro',
+    },
+    {
+        src: 'https://toefl.fullbrightindonesia.org/assets/logos/nottingham.png',
+        alt: 'University of Nottingham',
+    },
+    {
+        src: 'https://toefl.fullbrightindonesia.org/assets/logos/stuttgart.png',
+        alt: 'Universität Stuttgart',
+    },
+] as const;
 const FLASH_WINDOW_MS = 12 * 60 * 60 * 1000;
 function flashDeadline(): number {
     let start = Number(localStorage.getItem('fb_flash_start') || 0);
@@ -198,19 +237,18 @@ const gSideStyle = (side: 'prev' | 'next', gIdx: number): string => {
 };
 
 const KEYFRAMES = `
-  html, body, #app { width: 100%; max-width: 100vw; overflow-x: clip; -webkit-overflow-scrolling: touch; }
-  body { margin: 0; font-family: 'Nunito', system-ui, sans-serif; overflow-x: clip; max-width: 100vw; }
-  *, *::before, *::after { min-width: 0; box-sizing: border-box; }
-  img, video, iframe, svg { max-width: 100%; height: auto; }
-  section { max-width: 100vw; min-width: 0; overflow-x: clip; }
-  h1, h2, h3, h4, h5, h6, p, span, div, li, a, button, input, select, textarea, ul, ol, strong, b, em, i, label { font-family: 'Nunito', system-ui, sans-serif; }
-  h1, h2, h3, h4, h5, h6, p { overflow-wrap: anywhere; word-break: break-word; }
-  a { color: #D70808; }
-  a:hover { color: #b30606; }
   @keyframes infiniteScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @keyframes fbFadeInUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fbSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
   @keyframes heroBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+  @layer base {
+    body { margin: 0; font-family: 'Nunito', system-ui, sans-serif; }
+    h1, h2, h3, h4, h5, h6, p, span, div, li, a, button, input, select, textarea, ul, ol, strong, b, em, i, label { font-family: 'Nunito', system-ui, sans-serif; }
+    a { color: #D70808; }
+    a:hover { color: #b30606; }
+    section[id], div[id] { scroll-margin-top: 120px; }
+  }
 `;
 
 function CanonicalUrl(): null {
@@ -218,18 +256,36 @@ function CanonicalUrl(): null {
         if (typeof window === 'undefined') return;
         try {
             const url = new URL(window.location.href);
-            ['verify', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach((k) => {
+            [
+                'verify',
+                'utm_source',
+                'utm_medium',
+                'utm_campaign',
+                'utm_term',
+                'utm_content',
+            ].forEach((k) => {
                 url.searchParams.delete(k);
             });
-            const clean = url.origin + url.pathname + (url.searchParams.toString() ? '?' + url.searchParams.toString() : '') + url.hash;
-            let link = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+            const clean =
+                url.origin +
+                url.pathname +
+                (url.searchParams.toString()
+                    ? '?' + url.searchParams.toString()
+                    : '') +
+                url.hash;
+            let link = document.head.querySelector(
+                'link[rel="canonical"]',
+            ) as HTMLLinkElement | null;
             if (!link) {
                 link = document.createElement('link');
                 link.setAttribute('rel', 'canonical');
                 document.head.appendChild(link);
             }
             link.setAttribute('href', clean);
-            if (url.searchParams.toString() !== window.location.search.replace(/^\?/, '')) {
+            if (
+                url.searchParams.toString() !==
+                window.location.search.replace(/^\?/, '')
+            ) {
                 window.history.replaceState({}, '', clean);
             }
         } catch (_) {
@@ -501,7 +557,7 @@ export default function LandingPage() {
 
     return (
         <>
-            <Head title="Full Bright Indonesia | Persiapan TOEFL ITP" />
+            <Head title="Raih TOEFL 500+ Cukup 15 Hari. (LMS + Tutor AI)" />
             <CanonicalUrl />
             <style>{KEYFRAMES}</style>
 
@@ -543,41 +599,41 @@ export default function LandingPage() {
                     ) : null}
 
                     <header style={css(navStyle(scrolled))}>
-                    <div className="[margin:0_auto] [box-sizing:border-box] [display:flex] [height:64px] [width:100%] [max-width:1152px] [min-width:0] [align-items:center] [justify-content:space-between] [padding:0_24px]">
-                        <a
-                            href="#"
-                            className="[display:flex] [align-items:center] [text-decoration:none]"
-                        >
-                            <img
-                                src="https://toefl.fullbrightindonesia.org/logo/Logo-Fullbright.webp"
-                                alt="Full Bright Indonesia"
-                                className="[height:auto] [width:160px] [max-width:40vw] [object-fit:contain]"
-                            />
-                        </a>
-                        <TrackedCTA
-                            zone="nav"
-                            action="scroll"
-                            label="Amankan Seat"
-                            href="#pricing"
-                            onClick={scrollToPricing}
-                            className="[display:flex] [flex-direction:column] [justify-content:center] [gap:1px] [border-radius:9999px] [padding:7px_16px] [max-width:48vw] [box-shadow:0_6px_16px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none] max-[639px]:[padding:5px_10px] max-[639px]:[max-width:54vw]"
-                        >
-                            <span className="[font-size:13px] [line-height:1.2] [font-weight:800] [white-space:nowrap] [color:#fff]">
-                                🎓 Amankan Seat
-                            </span>
-                            <span className="[display:flex] [align-items:center] [gap:5px]">
-                                <span className="[font-size:11px] [white-space:nowrap] [color:rgba(255,255,255,0.55)] [text-decoration:line-through]">
-                                    Rp250rb
+                        <div className="[margin:0_auto] [box-sizing:border-box] [display:flex] [height:64px] [width:100%] [max-width:1152px] [min-width:0] [align-items:center] [justify-content:space-between] [padding:0_24px]">
+                            <a
+                                href="#"
+                                className="[display:flex] [align-items:center] [text-decoration:none]"
+                            >
+                                <img
+                                    src="https://toefl.fullbrightindonesia.org/logo/Logo-Fullbright.webp"
+                                    alt="Full Bright Indonesia"
+                                    className="[height:auto] [width:160px] [max-width:40vw] [object-fit:contain]"
+                                />
+                            </a>
+                            <TrackedCTA
+                                zone="nav"
+                                action="scroll"
+                                label="Amankan Seat"
+                                href="#pricing"
+                                onClick={scrollToPricing}
+                                className="[display:flex] [max-width:48vw] [flex-direction:column] [justify-content:center] [gap:1px] [border-radius:9999px] [padding:7px_16px] [box-shadow:0_6px_16px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none] max-[639px]:[max-width:54vw] max-[639px]:[padding:5px_10px]"
+                            >
+                                <span className="[font-size:13px] [line-height:1.2] [font-weight:800] [white-space:nowrap] [color:#fff]">
+                                    🎓 Amankan Seat
                                 </span>
-                                <span className="[font-size:14px] [font-weight:900] [white-space:nowrap] [color:#fff]">
-                                    Rp99rb
+                                <span className="[display:flex] [align-items:center] [gap:5px]">
+                                    <span className="[font-size:11px] [white-space:nowrap] [color:rgba(255,255,255,0.92)] [text-decoration:line-through]">
+                                        Rp250rb
+                                    </span>
+                                    <span className="[font-size:14px] [font-weight:900] [white-space:nowrap] [color:#fff]">
+                                        Rp99rb
+                                    </span>
+                                    <span className="[border-radius:9999px] [padding:2px_7px] [font-size:10px] [font-weight:900] [white-space:nowrap] [color:#151515] [background:#F59E0B]">
+                                        -60%
+                                    </span>
                                 </span>
-                                <span className="[border-radius:9999px] [padding:2px_7px] [font-size:10px] [font-weight:900] [white-space:nowrap] [color:#151515] [background:#F59E0B]">
-                                    -60%
-                                </span>
-                            </span>
-                        </TrackedCTA>
-                    </div>
+                            </TrackedCTA>
+                        </div>
                     </header>
                 </div>
                 <div style={{ height: bannerH + 64 }} aria-hidden="true"></div>
@@ -592,13 +648,13 @@ export default function LandingPage() {
 
                     <div
                         id="hero-section-inner"
-                        className="[position:relative] [margin:0_auto] [box-sizing:border-box] [display:grid] [width:100%] [max-width:1152px] [min-width:0] [grid-template-columns:1fr] [gap:40px] [padding:40px_24px_16px] max-[639px]:[gap:24px] max-[639px]:[padding-top:24px] max-[639px]:[padding-bottom:8px]"
+                        className="[position:relative] [margin:0_auto] [box-sizing:border-box] [display:grid] [width:100%] [max-width:1152px] [min-width:0] [grid-template-columns:1fr] [gap:40px] [padding:40px_24px_16px] max-[500px]:[gap:24px] max-[500px]:[padding-top:24px] max-[500px]:[padding-bottom:8px]"
                     >
                         <div className="[display:grid] [min-width:0] [grid-template-columns:1.05fr_0.95fr] [align-items:center] [gap:40px] max-[899px]:[position:relative] max-[899px]:[grid-template-columns:1fr] max-[899px]:[gap:12px]">
                             <div className="[position:relative] [z-index:1] [grid-column:1] [display:flex] [min-width:0] [flex-direction:column] [gap:16px]">
                                 <div
                                     id="hero-rating-badge"
-                                    className="[box-sizing:border-box] [display:inline-flex] [width:fit-content] [max-width:100%] [align-items:center] [gap:8px] [border-radius:9999px] [padding:6px_16px] [font-size:12px] [font-weight:700] [letter-spacing:0.05em] [color:#374151] [border:1.5px_solid_#151515] max-[639px]:[padding:clamp(4px,1.2vw,6px)_clamp(10px,3vw,16px)] max-[639px]:[font-size:clamp(9px,2.6vw,12px)]"
+                                    className="[box-sizing:border-box] [display:inline-flex] [width:fit-content] [max-width:100%] [align-items:center] [gap:8px] [border-radius:9999px] [padding:6px_16px] [font-size:12px] [font-weight:700] [letter-spacing:0.05em] [color:#374151] [border:1.5px_solid_#151515] max-[500px]:[padding:clamp(4px,1.2vw,6px)_clamp(10px,3vw,16px)] max-[500px]:[font-size:clamp(9px,2.6vw,12px)]"
                                 >
                                     <span className="[display:flex] [gap:2px] [color:#F59E0B]">
                                         ★★★★★
@@ -627,7 +683,7 @@ export default function LandingPage() {
 
                                 <h1
                                     id="hero-headline"
-                                    className="[margin:0] [max-width:100%] [min-width:0] [font-family:Nunito,sans-serif] [font-size:clamp(30px,4vw,44px)] [line-height:1.15] [font-weight:900] [overflow-wrap:anywhere] [color:#151515] max-[639px]:[font-size:clamp(24px,7vw,30px)]"
+                                    className="[margin:0] [max-width:100%] [min-width:0] [font-family:Nunito,sans-serif] [font-size:clamp(30px,4vw,44px)] [line-height:1.15] [font-weight:900] [overflow-wrap:anywhere] [color:#151515] max-[500px]:[font-size:clamp(24px,7vw,30px)]"
                                 >
                                     Serius Soal Beasiswa &amp; CPNS?
                                     <br />
@@ -639,7 +695,7 @@ export default function LandingPage() {
 
                                 <p
                                     id="hero-subheadline"
-                                    className="[margin:0] [max-width:100%] [min-width:0] [text-align:center] [font-size:16px] [line-height:1.6] [overflow-wrap:anywhere] [color:#3d3d3d] max-[639px]:[font-size:clamp(12px,3.4vw,14px)]"
+                                    className="[margin:0] [max-width:100%] [min-width:0] [font-size:16px] [line-height:1.6] [overflow-wrap:anywhere] [color:#3d3d3d] max-[500px]:[font-size:clamp(12px,3.4vw,14px)]"
                                 >
                                     <b>Persiapkan dari</b>
                                     <strong className="[color:rgb(21,_21,_21)]">
@@ -658,7 +714,7 @@ export default function LandingPage() {
 
                                 <div
                                     id="hero-trust-badges"
-                                    className="[display:flex] [flex-wrap:wrap] [gap:8px] max-[639px]:[display:none]"
+                                    className="[display:flex] [flex-wrap:wrap] [gap:8px] max-[500px]:[display:none]"
                                 >
                                     <span className="[display:inline-flex] [align-items:center] [gap:4px] [border-radius:9999px] [padding:6px_12px] [font-size:12px] [font-weight:600] [color:#374151] [background:#F3F4F6] [border:1px_solid_#e5e7eb]">
                                         ✓ Lembaga Resmi ITP &amp; IIEF
@@ -675,7 +731,7 @@ export default function LandingPage() {
                                 >
                                     <div
                                         id="hero-cta-buttons"
-                                        className="[display:flex] [width:100%] [max-width:100%] [min-width:0] [flex-wrap:wrap] [gap:12px] max-[639px]:[flex-direction:column]"
+                                        className="[display:flex] [width:100%] [max-width:100%] [min-width:0] [flex-wrap:wrap] [gap:12px] max-[500px]:[flex-direction:column]"
                                     >
                                         <TrackedCTA
                                             zone="hero"
@@ -690,7 +746,7 @@ export default function LandingPage() {
                                         </TrackedCTA>
                                         <a
                                             href="#testimonials"
-                                            className="[display:inline-flex] [max-width:100%] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:3px_9px] [font-size:10px] [font-weight:700] [color:#151515] [border:2px_solid_#D70808] [text-decoration:none] max-[639px]:[box-sizing:border-box] max-[639px]:[width:100%] max-[639px]:[padding:clamp(10px,3vw,14px)_clamp(16px,5vw,28px)] max-[639px]:[font-size:clamp(12px,3.6vw,16px)]"
+                                            className="[display:inline-flex] [max-width:100%] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:14px_28px] [font-size:16px] [font-weight:700] [color:#151515] [border:2px_solid_#D70808] [text-decoration:none] max-[500px]:[box-sizing:border-box] max-[500px]:[width:100%] max-[500px]:[padding:clamp(10px,3vw,14px)_clamp(16px,5vw,28px)] max-[500px]:[font-size:clamp(12px,3.6vw,16px)]"
                                         >
                                             Lihat Bukti Alumni →
                                         </a>
@@ -698,7 +754,7 @@ export default function LandingPage() {
 
                                     <div
                                         id="hero-rating-line"
-                                        className="[display:flex] [flex-wrap:wrap] [align-items:center] [justify-content:center] [gap:8px_12px]"
+                                        className="[display:flex] [flex-wrap:wrap] [align-items:center] [justify-content:flex-start] [gap:8px_12px]"
                                     >
                                         <span className="[display:flex] [align-items:center] [gap:4px] [font-size:12px] [font-weight:600] [color:#6b7280] max-[639px]:[font-size:clamp(9px,2.6vw,12px)]">
                                             ★★★★★{' '}
@@ -756,7 +812,7 @@ export default function LandingPage() {
                         </div>
                     </div>
 
-                    <div className="[position:relative] [display:flex] [justify-content:center] [padding-bottom:4px]">
+                    <div className="[position:relative] [display:flex] [justify-content:center] [padding-bottom:4px] max-[899px]:[margin-top:-78px] max-[899px]:[padding-bottom:10px]">
                         <div className="[display:flex] [height:52px] [width:52px] [animation:heroBounce_2s_ease-in-out_infinite] [align-items:center] [justify-content:center] [border-radius:9999px] [color:#374151] [background:#F3F4F6] [border:1px_solid_#e5e7eb]">
                             <svg
                                 width="22"
@@ -787,6 +843,30 @@ export default function LandingPage() {
                     </div>
                 </section>
 
+                {/* Social proof strip from the reference landing page */}
+                <div className="[overflow:hidden] [padding:32px_0] [background:#F3F3F3]">
+                    <p className="[margin:0_0_18px] [text-align:center] [font-size:12px] [font-weight:700] [letter-spacing:0.08em] [color:#4b5563] [text-transform:uppercase]">
+                        Alumni Kami Sekarang Kuliah Di
+                    </p>
+                    <div className="[overflow:hidden] [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+                        <div className="[display:flex] [width:max-content] [animation:infiniteScroll_30s_linear_infinite]">
+                            {[...UNIVERSITY_LOGOS, ...UNIVERSITY_LOGOS].map(
+                                (logo, index) => (
+                                    <img
+                                        key={`${logo.alt}-${index}`}
+                                        src={logo.src}
+                                        alt={logo.alt}
+                                        loading="lazy"
+                                        width="110"
+                                        height="64"
+                                        className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [object-fit:contain]"
+                                    />
+                                ),
+                            )}
+                        </div>
+                    </div>
+                </div>
+
                 {/* Problem / Agitation Section */}
                 <section
                     id="agitation"
@@ -807,7 +887,7 @@ export default function LandingPage() {
                             </span>
                         </h2>
 
-                        <p className="[margin:0_0_36px] [text-align:left] [font-size:11px] [line-height:1.6] [color:#6b6b6b]">
+                        <p className="[margin:0_0_36px] [text-align:center] [font-size:16px] [line-height:1.6] [color:#6b6b6b]">
                             Bukan karena kamu kurang berusaha. Hanya saja,{' '}
                             <b>
                                 usahamu belum memberikan hasil yang diharapkan.
@@ -836,7 +916,7 @@ export default function LandingPage() {
 
                             <div className="[display:grid] [grid-template-columns:1fr_1fr] [align-items:stretch] [border-bottom:1px_solid_#f2f2f2] max-[559px]:[grid-template-columns:1fr]">
                                 <div className="[display:flex] [align-items:flex-start] [gap:12px] [padding:18px] max-[559px]:[padding:16px_16px_10px]">
-                                    <span className="[flex-shrink:0] [padding-top:2px] [font-family:Nunito,sans-serif] [font-size:12px] [font-weight:900] [color:#c9c9c9]">
+                                    <span className="[flex-shrink:0] [padding-top:2px] [font-family:Nunito,sans-serif] [font-size:12px] [font-weight:900] [color:#6b7280]">
                                         01
                                     </span>
                                     <p className="[margin:0] [font-size:15px] [line-height:1.55] [font-weight:600] [color:#151515]">
@@ -852,7 +932,7 @@ export default function LandingPage() {
 
                             <div className="[display:grid] [grid-template-columns:1fr_1fr] [align-items:stretch] [border-bottom:1px_solid_#f2f2f2] max-[559px]:[grid-template-columns:1fr]">
                                 <div className="[display:flex] [align-items:flex-start] [gap:12px] [padding:18px] max-[559px]:[padding:16px_16px_10px]">
-                                    <span className="[flex-shrink:0] [padding-top:2px] [font-family:Nunito,sans-serif] [font-size:12px] [font-weight:900] [color:#c9c9c9]">
+                                    <span className="[flex-shrink:0] [padding-top:2px] [font-family:Nunito,sans-serif] [font-size:12px] [font-weight:900] [color:#6b7280]">
                                         02
                                     </span>
                                     <p className="[margin:0] [font-size:15px] [line-height:1.55] [font-weight:600] [color:#151515]">
@@ -868,7 +948,7 @@ export default function LandingPage() {
 
                             <div className="[display:grid] [grid-template-columns:1fr_1fr] [align-items:stretch] [border-bottom:1px_solid_#f2f2f2] max-[559px]:[grid-template-columns:1fr]">
                                 <div className="[display:flex] [align-items:flex-start] [gap:12px] [padding:18px] max-[559px]:[padding:16px_16px_10px]">
-                                    <span className="[flex-shrink:0] [padding-top:2px] [font-family:Nunito,sans-serif] [font-size:12px] [font-weight:900] [color:#c9c9c9]">
+                                    <span className="[flex-shrink:0] [padding-top:2px] [font-family:Nunito,sans-serif] [font-size:12px] [font-weight:900] [color:#6b7280]">
                                         03
                                     </span>
                                     <p className="[margin:0] [font-size:15px] [line-height:1.55] [font-weight:600] [color:#151515]">
@@ -884,7 +964,7 @@ export default function LandingPage() {
 
                             <div className="[display:grid] [grid-template-columns:1fr_1fr] [align-items:stretch] [border-bottom:1px_solid_#f2f2f2] max-[559px]:[grid-template-columns:1fr]">
                                 <div className="[display:flex] [align-items:flex-start] [gap:12px] [padding:18px] max-[559px]:[padding:16px_16px_10px]">
-                                    <span className="[flex-shrink:0] [padding-top:2px] [font-family:Nunito,sans-serif] [font-size:12px] [font-weight:900] [color:#c9c9c9]">
+                                    <span className="[flex-shrink:0] [padding-top:2px] [font-family:Nunito,sans-serif] [font-size:12px] [font-weight:900] [color:#6b7280]">
                                         04
                                     </span>
                                     <p className="[margin:0] [font-size:15px] [line-height:1.55] [font-weight:600] [color:#151515]">
@@ -901,7 +981,7 @@ export default function LandingPage() {
 
                             <div className="[display:grid] [grid-template-columns:1fr_1fr] [align-items:stretch] max-[559px]:[grid-template-columns:1fr]">
                                 <div className="[display:flex] [align-items:flex-start] [gap:12px] [padding:18px] max-[559px]:[padding:16px_16px_10px]">
-                                    <span className="[flex-shrink:0] [padding-top:2px] [font-family:Nunito,sans-serif] [font-size:12px] [font-weight:900] [color:#c9c9c9]">
+                                    <span className="[flex-shrink:0] [padding-top:2px] [font-family:Nunito,sans-serif] [font-size:12px] [font-weight:900] [color:#6b7280]">
                                         05
                                     </span>
                                     <p className="[margin:0] [font-size:15px] [line-height:1.55] [font-weight:600] [color:#151515]">
@@ -989,7 +1069,7 @@ export default function LandingPage() {
             >
                 <div className="[margin:0_auto] [max-width:1152px]">
                     <div className="[margin-bottom:56px] [text-align:center]">
-                        <div className="[margin-bottom:20px] [display:inline-flex] [align-items:center] [gap:8px] [border-radius:9999px] [padding:6px_16px] [font-size:12px] [font-weight:700] [letter-spacing:0.08em] [color:#0E7C4A] [text-transform:uppercase] [background:#EAFBF1] [border:1px_solid_#8fdcb4]">
+                        <div className="[margin-bottom:20px] [display:inline-flex] [align-items:center] [gap:8px] [border-radius:9999px] [padding:6px_16px] [font-size:12px] [font-weight:700] [letter-spacing:0.08em] [color:#D70808] [text-transform:uppercase] [background:#FFF0F0] [border:1px_solid_#ffb3b3]">
                             💡 Metode Eksklusif Full Bright
                         </div>
                         <h2 className="[margin:0_0_20px] [font-family:Nunito,sans-serif] [font-size:clamp(24px,3vw,36px)] [font-weight:900] [color:#151515]">
@@ -1287,26 +1367,26 @@ export default function LandingPage() {
                         <h2 className="[margin:0_0_14px] [font-family:Nunito,sans-serif] [font-size:clamp(24px,3vw,36px)] [line-height:1.25] [font-weight:900] [color:#151515]">
                             Metode Kami Berhasil Membuat
                             <br />
-                            <span className="[color:#d70808] [font-size:26.46px]">
+                            <span className="[font-size:26.46px] [color:#d70808]">
                                 Ribuan Alumni Kami Capai TOEFL 500+&nbsp;
                             </span>
                         </h2>
 
-                        <p className="[margin:0] [font-size:14px] [color:#9ca3af]">
+                        <p className="[margin:0] [font-size:14px] [color:#6b7280]">
                             Klik foto untuk memperbesar
                         </p>
                     </div>
 
-                    <div className="[margin:0_auto_32px] [display:flex] [max-width:980px] [flex-direction:column]">
+                    <div className="[margin:0_auto_32px] [display:flex] [max-width:420px] [flex-direction:column]">
                         <div
                             className="[display:flex] [cursor:pointer] [flex-direction:column] [align-items:center] [gap:10px] [padding:20px_0] [border-bottom:1px_solid_#e5e7eb]"
                             onClick={() => setLightboxIdx(0)}
                         >
-                            <p className="[margin:0] [width:100%] [text-align:left] [font-family:Nunito,sans-serif] [font-size:11px] [font-weight:800] [color:#151515]">
+                            <p className="[margin:0] [font-family:Nunito,sans-serif] [font-size:18px] [font-weight:800] [color:#151515]">
                                 Skor{' '}
                                 <span className="[color:#D70808]">547</span>
                             </p>
-                            <div className="[aspect-ratio:16/9] [width:100%] [overflow:hidden] [border-radius:14px] [background-image:url(/assets/toefl1.webp)] [background-size:cover] [background-position:center] [box-shadow:0_6px_24px_rgba(0,0,0,0.18)]"></div>
+                            <div className="[aspect-ratio:1/1] [width:100%] [overflow:hidden] [border-radius:14px] [background-image:url(/assets/toefl1.webp)] [background-size:cover] [background-position:center] [box-shadow:0_6px_24px_rgba(0,0,0,0.18)]"></div>
                         </div>
 
                         <div
@@ -1317,7 +1397,7 @@ export default function LandingPage() {
                                 Skor{' '}
                                 <span className="[color:#D70808]">543</span>
                             </p>
-                            <div className="[aspect-ratio:16/9] [width:100%] [overflow:hidden] [border-radius:14px] [background-image:url(/assets/toefl2.webp)] [background-size:cover] [background-position:center] [box-shadow:0_6px_24px_rgba(0,0,0,0.18)]"></div>
+                            <div className="[aspect-ratio:1/1] [width:100%] [overflow:hidden] [border-radius:14px] [background-image:url(/assets/toefl2.webp)] [background-size:cover] [background-position:center] [box-shadow:0_6px_24px_rgba(0,0,0,0.18)]"></div>
                         </div>
 
                         <div
@@ -1328,7 +1408,7 @@ export default function LandingPage() {
                                 Skor{' '}
                                 <span className="[color:#D70808]">563</span>
                             </p>
-                            <div className="[aspect-ratio:16/9] [width:100%] [overflow:hidden] [border-radius:14px] [background-image:url(/assets/toefl3.webp)] [background-size:cover] [background-position:center] [box-shadow:0_6px_24px_rgba(0,0,0,0.18)]"></div>
+                            <div className="[aspect-ratio:1/1] [width:100%] [overflow:hidden] [border-radius:14px] [background-image:url(/assets/toefl3.webp)] [background-size:cover] [background-position:center] [box-shadow:0_6px_24px_rgba(0,0,0,0.18)]"></div>
                         </div>
                     </div>
 
@@ -1346,7 +1426,7 @@ export default function LandingPage() {
                             </TrackedCTA>
                             <a
                                 href="#testimonials"
-                                className="[display:inline-flex] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:4px_10px] [font-size:11px] [font-weight:700] [color:#151515] [border:2px_solid_#D70808] [text-decoration:none]"
+                                className="[display:inline-flex] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:14px_28px] [font-size:16px] [font-weight:700] [color:#151515] [border:2px_solid_#D70808] [text-decoration:none]"
                             >
                                 Lihat Lebih Banyak Bukti →
                             </a>
@@ -1376,10 +1456,7 @@ export default function LandingPage() {
             </section>
 
             {/* LMS Preview */}
-            <section
-                id="lms"
-                className="[padding:80px_24px] [background:#fff]"
-            >
+            <section id="lms" className="[padding:80px_24px] [background:#fff]">
                 <div className="[margin:0_auto] [max-width:1152px]">
                     <div className="[margin-bottom:48px] [text-align:center]">
                         <div className="[margin-bottom:20px] [display:inline-flex] [align-items:center] [gap:8px] [border-radius:9999px] [padding:6px_16px] [font-size:12px] [font-weight:700] [letter-spacing:0.08em] [color:#D70808] [text-transform:uppercase] [background:#FFF0F0] [border:1px_solid_#ffb3b3]">
@@ -1442,13 +1519,17 @@ export default function LandingPage() {
                         <div className="[display:grid] [grid-template-columns:1.35fr_1fr] [align-items:stretch] [overflow:hidden] [border-radius:22px] [box-shadow:0_4px_22px_rgba(0,0,0,0.06)] [background:#fff] [border:1px_solid_#ececec] max-[899px]:[grid-template-columns:1fr]">
                             <div className="[display:flex] [flex-direction:column] [justify-content:center] [padding:22px] [background:#FAFAFA]">
                                 <div className="[overflow:hidden] [border-radius:12px] [line-height:0] [box-shadow:0_4px_18px_rgba(0,0,0,0.09)] [background:#fff] [border:1px_solid_#e5e7eb]">
-                                    <div
-                                        role="img"
-                                        aria-label="Tidak Lagi Bingung Harus Mulai dari Mana"
-                                        className="[display:flex] [aspect-ratio:16/9] [width:100%] [align-items:center] [justify-content:center] [font-size:14px] [font-weight:900] [letter-spacing:0.04em] [color:#D70808] [background:linear-gradient(135deg,#fff_0%,#FFF0F0_100%)]"
-                                    >
-                                        Diagnostic Test
-                                    </div>
+                                    <img
+                                        src="https://toefl.fullbrightindonesia.org/lms/lms-1.webp"
+                                        alt="Tidak Lagi Bingung Harus Mulai dari Mana"
+                                        width={1920}
+                                        height={1200}
+                                        style={{
+                                            aspectRatio: '8 / 5',
+                                            objectFit: 'cover',
+                                        }}
+                                        className="[display:block] [height:auto] [width:100%]"
+                                    />
                                 </div>
                             </div>
                             <div className="[display:flex] [flex-direction:column] [justify-content:center] [gap:11px] [padding:24px_26px]">
@@ -1497,8 +1578,14 @@ export default function LandingPage() {
                             <div className="[order:2] [display:flex] [flex-direction:column] [justify-content:center] [padding:22px] [background:#FAFAFA] max-[899px]:[order:initial]">
                                 <div className="[overflow:hidden] [border-radius:12px] [line-height:0] [box-shadow:0_4px_18px_rgba(0,0,0,0.09)] [background:#fff] [border:1px_solid_#e5e7eb]">
                                     <img
-                                        src="/assets/materi.gif"
+                                        src="https://toefl.fullbrightindonesia.org/lms/lms-2.webp"
                                         alt="Materi Sudah Urut, Kamu Tinggal Mengikuti"
+                                        width={1920}
+                                        height={1200}
+                                        style={{
+                                            aspectRatio: '8 / 5',
+                                            objectFit: 'cover',
+                                        }}
                                         className="[display:block] [height:auto] [width:100%]"
                                     />
                                 </div>
@@ -1549,8 +1636,14 @@ export default function LandingPage() {
                             <div className="[display:flex] [flex-direction:column] [justify-content:center] [padding:22px] [background:#FAFAFA]">
                                 <div className="[overflow:hidden] [border-radius:12px] [line-height:0] [box-shadow:0_4px_18px_rgba(0,0,0,0.09)] [background:#fff] [border:1px_solid_#e5e7eb]">
                                     <img
-                                        src="/assets/video-ai.gif"
+                                        src="https://toefl.fullbrightindonesia.org/lms/lms-3.webp"
                                         alt="Kalau Bingung, Ada yang Langsung Menjawab"
+                                        width={1474}
+                                        height={924}
+                                        style={{
+                                            aspectRatio: '1474 / 924',
+                                            objectFit: 'cover',
+                                        }}
                                         className="[display:block] [height:auto] [width:100%]"
                                     />
                                 </div>
@@ -1601,8 +1694,14 @@ export default function LandingPage() {
                             <div className="[order:2] [display:flex] [flex-direction:column] [justify-content:center] [padding:22px] [background:#FAFAFA] max-[899px]:[order:initial]">
                                 <div className="[overflow:hidden] [border-radius:12px] [line-height:0] [box-shadow:0_4px_18px_rgba(0,0,0,0.09)] [background:#fff] [border:1px_solid_#e5e7eb]">
                                     <img
-                                        src="/assets/latihan.gif"
+                                        src="https://toefl.fullbrightindonesia.org/lms/lms-4.webp"
                                         alt="Tahu Persis Bagian yang Belum Kamu Kuasai"
+                                        width={1920}
+                                        height={1200}
+                                        style={{
+                                            aspectRatio: '8 / 5',
+                                            objectFit: 'cover',
+                                        }}
                                         className="[display:block] [height:auto] [width:100%]"
                                     />
                                 </div>
@@ -1653,8 +1752,14 @@ export default function LandingPage() {
                             <div className="[display:flex] [flex-direction:column] [justify-content:center] [padding:22px] [background:#FAFAFA]">
                                 <div className="[overflow:hidden] [border-radius:12px] [line-height:0] [box-shadow:0_4px_18px_rgba(0,0,0,0.09)] [background:#fff] [border:1px_solid_#e5e7eb]">
                                     <img
-                                        src="/assets/drill.gif"
+                                        src="https://toefl.fullbrightindonesia.org/lms/lms-5.webp"
                                         alt="Kesalahan yang Sama Tidak Terulang Lagi"
+                                        width={1920}
+                                        height={1200}
+                                        style={{
+                                            aspectRatio: '8 / 5',
+                                            objectFit: 'cover',
+                                        }}
                                         className="[display:block] [height:auto] [width:100%]"
                                     />
                                 </div>
@@ -1705,8 +1810,14 @@ export default function LandingPage() {
                             <div className="[order:2] [display:flex] [flex-direction:column] [justify-content:center] [padding:22px] [background:#FAFAFA] max-[899px]:[order:initial]">
                                 <div className="[overflow:hidden] [border-radius:12px] [line-height:0] [box-shadow:0_4px_18px_rgba(0,0,0,0.09)] [background:#fff] [border:1px_solid_#e5e7eb]">
                                     <img
-                                        src="/assets/simulasi.gif"
+                                        src="https://toefl.fullbrightindonesia.org/lms/lms-6.webp"
                                         alt="Supaya Nanti Saat Tes TOEFL Asli Tidak Kaget"
+                                        width={1920}
+                                        height={1200}
+                                        style={{
+                                            aspectRatio: '8 / 5',
+                                            objectFit: 'cover',
+                                        }}
                                         className="[display:block] [height:auto] [width:100%]"
                                     />
                                 </div>
@@ -1760,13 +1871,17 @@ export default function LandingPage() {
                         <div className="[display:grid] [grid-template-columns:1.35fr_1fr] [align-items:stretch] [overflow:hidden] [border-radius:22px] [box-shadow:0_4px_22px_rgba(0,0,0,0.06)] [background:#fff] [border:1px_solid_#ececec] max-[899px]:[grid-template-columns:1fr]">
                             <div className="[display:flex] [flex-direction:column] [justify-content:center] [padding:22px] [background:#FAFAFA]">
                                 <div className="[overflow:hidden] [border-radius:12px] [line-height:0] [box-shadow:0_4px_18px_rgba(0,0,0,0.09)] [background:#fff] [border:1px_solid_#e5e7eb]">
-                                    <div
-                                        role="img"
-                                        aria-label="Progresmu Terlihat, Bukan Cuma Terasa Sibuk"
-                                        className="[display:flex] [aspect-ratio:16/9] [width:100%] [align-items:center] [justify-content:center] [font-size:14px] [font-weight:900] [letter-spacing:0.04em] [color:#D70808] [background:linear-gradient(135deg,#fff_0%,#FFF0F0_100%)]"
-                                    >
-                                        Dashboard Progres
-                                    </div>
+                                    <img
+                                        src="https://toefl.fullbrightindonesia.org/lms/lms-7.webp"
+                                        alt="Progresmu Terlihat, Bukan Cuma Terasa Sibuk"
+                                        width={1920}
+                                        height={1200}
+                                        style={{
+                                            aspectRatio: '8 / 5',
+                                            objectFit: 'cover',
+                                        }}
+                                        className="[display:block] [height:auto] [width:100%]"
+                                    />
                                 </div>
                             </div>
                             <div className="[display:flex] [flex-direction:column] [justify-content:center] [gap:11px] [padding:24px_26px]">
@@ -1879,12 +1994,12 @@ export default function LandingPage() {
 
             {/* Why Full Bright */}
             <section
-                id="why-full-bright"
+                id="why-fullbright"
                 className="[padding:80px_24px] [background:#F3F3F3]"
             >
                 <div className="[margin:0_auto] [max-width:1152px]">
                     <div className="[margin-bottom:48px] [text-align:center]">
-                        <div className="[margin-bottom:20px] [display:inline-flex] [align-items:center] [gap:8px] [border-radius:9999px] [padding:6px_16px] [font-size:12px] [font-weight:700] [letter-spacing:0.08em] [color:#1D4ED8] [text-transform:uppercase] [background:#E8F1FF] [border:1px_solid_#93b4ff]">
+                        <div className="[margin-bottom:20px] [display:inline-flex] [align-items:center] [gap:8px] [border-radius:9999px] [padding:6px_16px] [font-size:12px] [font-weight:700] [letter-spacing:0.08em] [color:#D70808] [text-transform:uppercase] [background:#FFF0F0] [border:1px_solid_#ffb3b3]">
                             🏅 Mengapa Full Bright?
                         </div>
                         <h2 className="[margin:0] [font-family:Nunito,sans-serif] [font-size:clamp(24px,3vw,36px)] [font-weight:900] [color:#151515]">
@@ -1895,7 +2010,7 @@ export default function LandingPage() {
                     </div>
                     <div className="[margin:0_auto_40px] [display:grid] [max-width:768px] [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))] [gap:16px]">
                         <div className="[display:flex] [align-items:flex-start] [gap:16px] [border-radius:16px] [padding:16px] [box-shadow:0_1px_8px_rgba(0,0,0,0.04)] [background:#fff]">
-                            <div className="[margin-top:2px] [display:flex] [height:36px] [width:36px] [flex-shrink:0] [align-items:center] [justify-content:center] [border-radius:12px] [color:#fff] [background:#1D4ED8]">
+                            <div className="[margin-top:2px] [display:flex] [height:36px] [width:36px] [flex-shrink:0] [align-items:center] [justify-content:center] [border-radius:12px] [color:#fff] [background:#D70808]">
                                 📖
                             </div>
                             <div className="[display:flex] [flex-direction:column] [gap:4px]">
@@ -1910,7 +2025,7 @@ export default function LandingPage() {
                             </div>
                         </div>
 
-                        <div className="[display:flex] [align-items:flex-start] [gap:16px] [border-radius:16px] [padding:2px_4px] [box-shadow:0_1px_8px_rgba(0,0,0,0.04)] [background:#fff]">
+                        <div className="[display:flex] [align-items:flex-start] [gap:16px] [border-radius:16px] [padding:16px] [box-shadow:0_1px_8px_rgba(0,0,0,0.04)] [background:#fff]">
                             <div className="[margin-top:2px] [display:flex] [height:36px] [width:36px] [flex-shrink:0] [align-items:center] [justify-content:center] [border-radius:12px] [color:#fff] [background:#D70808]">
                                 📈
                             </div>
@@ -1918,7 +2033,7 @@ export default function LandingPage() {
                                 <p className="[margin:0] [font-size:14px] [line-height:1.4] [font-weight:700] [color:#151515]">
                                     Alumni Lulus Beasiswa ke Luar Negeri
                                 </p>
-                                <p className="[margin:0] [font-size:8px] [line-height:1.5] [color:#6b7280]">
+                                <p className="[margin:0] [font-size:12px] [line-height:1.5] [color:#6b7280]">
                                     UK, Jerman, Australia: bukti nyata metode
                                     belajar bertahap ini bekerja, bukan sekadar
                                     janji.
@@ -1949,7 +2064,7 @@ export default function LandingPage() {
                                 <p className="[margin:0] [font-size:14px] [line-height:1.4] [font-weight:700] [color:#151515]">
                                     Cukup 1 Jam Sehari, Mulai dari Sekarang
                                 </p>
-                                <p className="[margin:0] [text-align:center] [font-size:17px] [line-height:1.5] [color:#6b7280]">
+                                <p className="[margin:0] [font-size:12px] [line-height:1.5] [color:#6b7280]">
                                     Tidak perlu menunggu waktu luang besar. 1
                                     jam sehari dari sekarang jauh lebih ringan
                                     daripada belajar maraton menjelang deadline.
@@ -1960,7 +2075,7 @@ export default function LandingPage() {
                     <div className="[margin:0_auto_36px] [max-width:440px] [overflow:hidden] [border-radius:18px] [box-shadow:0_3px_16px_rgba(0,0,0,0.05)] [background:#fff] [border:1px_solid_#ececec]">
                         <div className="[line-height:0]">
                             <img
-                                src="/assets/Foto Bareng.png"
+                                src="https://toefl.fullbrightindonesia.org/assets/Foto%20Bareng.webp"
                                 alt="Tim instruktur Full Bright Indonesia"
                                 className="[display:block] [height:auto] [width:100%]"
                             />
@@ -1979,7 +2094,7 @@ export default function LandingPage() {
                                 label="Gabung Sekarang"
                                 href="#pricing"
                                 onClick={scrollToPricing}
-                                className="[display:inline-flex] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:30px_64px] [font-size:24px] [font-weight:700] [color:#fff] [box-shadow:0_4px_20px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none]"
+                                className="[display:inline-flex] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:14px_28px] [font-size:16px] [font-weight:700] [color:#fff] [box-shadow:0_4px_20px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none]"
                             >
                                 Gabung Sekarang →
                             </TrackedCTA>
@@ -2750,7 +2865,7 @@ export default function LandingPage() {
                         </div>
 
                         <div className="[margin-top:48px] [margin-right:auto] [margin-left:auto] [max-width:520px]">
-                            <p className="[margin:0_0_6px] [text-align:center] [font-size:11px] [font-weight:900] [letter-spacing:0.08em] [color:#9ca3af] [text-transform:uppercase]">
+                            <p className="[margin:0_0_6px] [text-align:center] [font-size:11px] [font-weight:900] [letter-spacing:0.08em] [color:#6b7280] [text-transform:uppercase]">
                                 Cerita Alumni
                             </p>
                             <h3 className="[margin:0_0_16px] [text-align:center] [font-family:Nunito,sans-serif] [font-size:clamp(19px,2.4vw,24px)] [line-height:1.3] [font-weight:900] [color:#151515]">
@@ -2924,7 +3039,7 @@ export default function LandingPage() {
                                         Jangan Ditunda
                                     </span>
                                 </h2>
-                                <p className="[margin:0] [margin-right:auto] [margin-left:auto] [max-width:512px] [font-size:10px] [line-height:1.6] [color:#3d3d3d]">
+                                <p className="[margin:0] [margin-right:auto] [margin-left:auto] [max-width:512px] [font-size:16px] [line-height:1.6] [color:#3d3d3d]">
                                     <b>
                                         Semakin cepat kamu mulai, semakin besar
                                         peluang kamu diterima beasiswa
@@ -2939,7 +3054,7 @@ export default function LandingPage() {
                                     👇 Pilih Cara Belajarmu
                                 </p>
 
-                                <div className="[display:flex] [flex-wrap:wrap] [justify-content:center] [gap:4px] [border-radius:9999px] [padding:5px] [max-width:340px] [margin:0_auto] [box-shadow:0_2px_12px_rgba(215,8,8,0.08)] [background:#fff] [border:1px_solid_#ffb3b3]">
+                                <div className="[margin:0_auto] [display:flex] [max-width:340px] [flex-wrap:wrap] [justify-content:center] [gap:4px] [border-radius:9999px] [padding:5px] [box-shadow:0_2px_12px_rgba(215,8,8,0.08)] [background:#fff] [border:1px_solid_#ffb3b3]">
                                     <button
                                         onClick={() => setMode('self')}
                                         style={css(toggleBtnStyle(true))}
@@ -2952,7 +3067,7 @@ export default function LandingPage() {
                                         style={css(toggleBtnStyle(false))}
                                     >
                                         Dibimbing Tutor
-                                        <span className="[position:absolute] [top:-9px] [right:-6px] [display:flex] [height:28px] [width:28px] [align-items:center] [justify-content:center] [border-radius:9999px] [font-size:10px] [font-weight:900] [color:#fff] [box-shadow:0_2px_8px_rgba(249,115,22,0.4)] [background:#F97316] [border:2px_solid_fff] max-[639px]:[height:24px] max-[639px]:[width:24px] max-[639px]:[font-size:9px] max-[639px]:[right:-4px] max-[639px]:[top:-7px]">
+                                        <span className="[position:absolute] [top:-9px] [right:-6px] [display:flex] [height:34px] [width:34px] [align-items:center] [justify-content:center] [border-radius:9999px] [font-size:11px] [font-weight:900] [color:#151515] [box-shadow:0_2px_8px_rgba(249,115,22,0.4)] [background:#F97316] [border:2px_solid_#fff]">
                                             -80%
                                         </span>
                                     </button>
@@ -2961,7 +3076,7 @@ export default function LandingPage() {
 
                             <div className="[margin:0_auto_40px] [max-width:520px]">
                                 <div className="[position:relative] [display:flex] [flex-direction:column] [overflow:hidden] [border-radius:24px] [padding:28px] [box-shadow:0_8px_32px_rgba(245,183,0,0.15)] [background:linear-gradient(165deg,#ffffff_0%,#fffbf0_100%)] [border:2px_solid_#F5B700]">
-                                    <div className="[position:absolute] [top:0] [right:0] [border-bottom-left-radius:16px] [padding:8px_16px] [font-family:Nunito,sans-serif] [font-size:12px] [font-weight:900] [color:#FFFFFF] [background:#F5B700]">
+                                    <div className="[position:absolute] [top:0] [right:0] [border-bottom-left-radius:16px] [padding:8px_16px] [font-family:Nunito,sans-serif] [font-size:12px] [font-weight:900] [color:#151515] [background:#F5B700]">
                                         🔥 POPULAR
                                     </div>
                                     <div className="[margin-top:20px] [margin-bottom:4px] [display:flex] [align-items:flex-start] [justify-content:space-between]">
@@ -3072,7 +3187,10 @@ export default function LandingPage() {
                                             rel="noopener noreferrer"
                                             onClick={markCheckoutClicked}
                                             className="[box-sizing:border-box] [display:inline-flex] [width:100%] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:16px_20px] [font-size:16px] [font-weight:900] [color:#fff] [box-shadow:0_6px_24px_rgba(215,8,8,0.4)] [background:#D70808] [text-decoration:none]"
-                                            style={{ color: '#fff', background: '#D70808' }}
+                                            style={{
+                                                color: '#fff',
+                                                background: '#D70808',
+                                            }}
                                         >
                                             Mulai Belajar Mandiri →
                                         </TrackedCTA>
@@ -3118,7 +3236,7 @@ export default function LandingPage() {
                             </div>
 
                             <div className="[margin:0_auto_32px] [max-width:520px]">
-                                <p className="[margin:0_0_16px] [text-align:center] [font-size:13px] [font-weight:800] [letter-spacing:0.06em] [color:#9a9a9a] [text-transform:uppercase]">
+                                <p className="[margin:0_0_16px] [text-align:center] [font-size:13px] [font-weight:800] [letter-spacing:0.06em] [color:#6b7280] [text-transform:uppercase]">
                                     Kata Mereka yang Belajar Mandiri
                                 </p>
                                 <div className="[display:grid] [grid-template-columns:1fr] [gap:12px]">
@@ -3396,7 +3514,10 @@ export default function LandingPage() {
                                             rel="noopener noreferrer"
                                             onClick={markCheckoutClicked}
                                             className="[box-sizing:border-box] [display:inline-flex] [width:100%] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:16px_20px] [font-size:16px] [font-weight:900] [color:#fff] [box-shadow:0_6px_24px_rgba(215,8,8,0.4)] [background:#D70808] [text-decoration:none]"
-                                            style={{ color: '#fff', background: '#D70808' }}
+                                            style={{
+                                                color: '#fff',
+                                                background: '#D70808',
+                                            }}
                                         >
                                             Apply Sekarang →
                                         </TrackedCTA>
@@ -3687,7 +3808,10 @@ export default function LandingPage() {
                                             rel="noopener noreferrer"
                                             onClick={markCheckoutClicked}
                                             className="[box-sizing:border-box] [display:inline-flex] [width:100%] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:16px_20px] [font-size:16px] [font-weight:900] [color:#fff] [box-shadow:0_6px_24px_rgba(22,163,74,0.4)] [background:#16a34a] [text-decoration:none]"
-                                            style={{ color: '#fff', background: '#16a34a' }}
+                                            style={{
+                                                color: '#fff',
+                                                background: '#16a34a',
+                                            }}
                                         >
                                             Apply Sekarang →
                                         </TrackedCTA>
@@ -3916,7 +4040,10 @@ export default function LandingPage() {
                                             rel="noopener noreferrer"
                                             onClick={markCheckoutClicked}
                                             className="[box-sizing:border-box] [display:inline-flex] [width:100%] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:16px_20px] [font-size:16px] [font-weight:900] [color:#fff] [box-shadow:0_6px_24px_rgba(215,8,8,0.4)] [background:#D70808] [text-decoration:none]"
-                                            style={{ color: '#fff', background: '#D70808' }}
+                                            style={{
+                                                color: '#fff',
+                                                background: '#D70808',
+                                            }}
                                         >
                                             Apply Sekarang →
                                         </TrackedCTA>
@@ -4750,6 +4877,166 @@ export default function LandingPage() {
                 </div>
             </section>
 
+            <footer className="[padding:56px_16px_32px] [background:#151515]">
+                <div className="[margin:0_auto] [max-width:1152px]">
+                    <div className="[margin-bottom:40px] [display:grid] [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))] [gap:40px]">
+                        <div>
+                            <div className="[margin-bottom:16px]">
+                                <img
+                                    src="https://toefl.fullbrightindonesia.org/logo/Logo-Fullbright.webp"
+                                    alt="Full Bright Indonesia"
+                                    className="[height:auto] [width:160px] [object-fit:contain] [filter:brightness(0)_invert(1)]"
+                                />
+                            </div>
+                            <p className="[margin:0_0_16px] [font-size:12px] [line-height:1.6] [color:#9ca3af]">
+                                SK Kemenkumham RI No. AHU-0055720-AH.0114 Tahun
+                                2020
+                                <br />
+                                SK LKP No. 503/20177/LKP/DPM-PTSP/8/2024
+                                <br />
+                                NPSN K9998700 · Kerjasama dengan IIEF Jakarta
+                            </p>
+                            <div className="[display:flex] [gap:12px]">
+                                <a
+                                    href="https://www.instagram.com/fulbrightindonesia/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Instagram"
+                                    className="[display:flex] [height:36px] [width:36px] [align-items:center] [justify-content:center] [border-radius:12px] [color:#9ca3af] [background:rgba(255,255,255,0.08)] [text-decoration:none]"
+                                >
+                                    <svg
+                                        width="17"
+                                        height="17"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                    >
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p className="[margin:0_0_20px] [font-size:12px] [font-weight:900] [letter-spacing:0.08em] [color:#9ca3af] [text-transform:uppercase]">
+                                Navigasi
+                            </p>
+                            <ul className="[margin:0] [display:flex] [flex-direction:column] [gap:12px] [padding:0] [list-style:none]">
+                                <li>
+                                    <a
+                                        href="#value"
+                                        className="[font-size:14px] [color:#9ca3af] [text-decoration:none]"
+                                    >
+                                        Keunggulan
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#testimonials"
+                                        className="[font-size:14px] [color:#9ca3af] [text-decoration:none]"
+                                    >
+                                        Testimoni
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#pricing"
+                                        onClick={scrollToPricing}
+                                        className="[font-size:14px] [color:#9ca3af] [text-decoration:none]"
+                                    >
+                                        Harga
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#faq"
+                                        className="[font-size:14px] [color:#9ca3af] [text-decoration:none]"
+                                    >
+                                        FAQ
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <p className="[margin:0_0_20px] [font-size:12px] [font-weight:900] [letter-spacing:0.08em] [color:#9ca3af] [text-transform:uppercase]">
+                                Hubungi Kami
+                            </p>
+                            <ul className="[margin:0] [display:flex] [flex-direction:column] [gap:16px] [padding:0] [list-style:none]">
+                                {[
+                                    [
+                                        '💬',
+                                        'Ms. Aini',
+                                        '+62 819-5948-6507',
+                                        'https://wa.me/6281959486507',
+                                    ],
+                                    [
+                                        '💬',
+                                        'Mr. Choiri',
+                                        '+62 887-4487-5322',
+                                        'https://wa.me/6288744875322',
+                                    ],
+                                    [
+                                        '💬',
+                                        'Ms. Fini',
+                                        '+62 852-5549-9299',
+                                        'https://wa.me/6285255499299',
+                                    ],
+                                    [
+                                        '✉',
+                                        'Email',
+                                        'info@fullbrightindonesia.org',
+                                        'mailto:info@fullbrightindonesia.org',
+                                    ],
+                                ].map(([icon, label, value, href]) => (
+                                    <li
+                                        key={label}
+                                        className="[display:flex] [align-items:flex-start] [gap:12px]"
+                                    >
+                                        <div className="[margin-top:2px] [display:flex] [height:32px] [width:32px] [flex-shrink:0] [align-items:center] [justify-content:center] [border-radius:8px] [color:#9ca3af] [background:rgba(255,255,255,0.08)]">
+                                            {icon}
+                                        </div>
+                                        <div>
+                                            <p className="[margin:0_0_2px] [font-size:12px] [font-weight:600] [color:#fff]">
+                                                {label}
+                                            </p>
+                                            <a
+                                                href={href}
+                                                className="[font-size:12px] [color:#9ca3af] [text-decoration:none]"
+                                            >
+                                                {value}
+                                            </a>
+                                        </div>
+                                    </li>
+                                ))}
+                                <li className="[display:flex] [align-items:flex-start] [gap:12px]">
+                                    <div className="[margin-top:2px] [display:flex] [height:32px] [width:32px] [flex-shrink:0] [align-items:center] [justify-content:center] [border-radius:8px] [color:#9ca3af] [background:rgba(255,255,255,0.08)]">
+                                        📍
+                                    </div>
+                                    <div>
+                                        <p className="[margin:0_0_2px] [font-size:12px] [font-weight:600] [color:#fff]">
+                                            Alamat
+                                        </p>
+                                        <p className="[margin:0] [font-size:12px] [color:#9ca3af]">
+                                            Gedung Yotta Signature Perintis, Jl.
+                                            Perintis Kemerdekaan No.97 Lantai 3,
+                                            Tamalanrea Jaya, Kec. Tamalanrea,
+                                            Kota Makassar, Sulawesi Selatan
+                                            90245
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="[display:flex] [justify-content:center] [padding-top:24px] [font-size:12px] [color:#9ca3af] [border-top:1px_solid_rgba(255,255,255,0.08)]">
+                        <p className="[margin:0]">
+                            © 2026 Full Bright Indonesia. Lembaga Resmi TOEFL
+                            ITP bekerjasama dengan IIEF Jakarta.
+                        </p>
+                    </div>
+                </div>
+            </footer>
+
             {/* Return-to-checkout survey bottom sheet */}
             {rpOpen ? (
                 <>
@@ -4860,7 +5147,7 @@ export default function LandingPage() {
             ) : null}
 
             {/* Floating WhatsApp */}
-            <div className="[position:fixed] [right:48px] [bottom:80px] [z-index:52] [display:flex] [flex-direction:column] [align-items:flex-end] [gap:10px] max-[500px]:[right:16px] max-[500px]:[bottom:72px]">
+            <div className="[position:fixed] [right:48px] [bottom:20px] [z-index:52] [display:flex] [flex-direction:column] [align-items:flex-end] [gap:10px] max-[559px]:[right:28px]">
                 {waBubbleOpen ? (
                     <>
                         <div className="[position:relative] [max-width:270px] [border-radius:18px_18px_6px_18px] [padding:14px_16px_14px_14px] [box-shadow:0_10px_34px_rgba(0,0,0,0.18)] [background:#fff] [border:1px_solid_#e5e7eb] max-[559px]:[max-width:208px] max-[559px]:[border-radius:14px_14px_5px_14px] max-[559px]:[padding:10px_12px_10px_11px]">
