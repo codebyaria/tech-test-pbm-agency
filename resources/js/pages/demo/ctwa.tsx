@@ -4139,7 +4139,7 @@ export default function LandingPage() {
             {/* FAQ */}
             <section
                 id="faq"
-                className="[padding:80px_24px_48px] [background:#F3F3F3]"
+                className="[padding:48px_24px_48px] [background:#F3F3F3]"
             >
                 <div className="[margin:0_auto] [max-width:1152px]">
                     <div className="[margin-bottom:56px] [text-align:left]">
@@ -4804,7 +4804,7 @@ export default function LandingPage() {
             {/* Survey */}
             <section
                 id="survey"
-                className="[padding:28px_24px] [background:#fff]"
+                className="[padding:20px_24px_12px] [background:#fff]"
             >
                 <div className="[margin:0_auto] [max-width:460px] [border-radius:16px] [padding:20px_20px_16px] [background:#FAFAFA] [border:1px_solid_#ececec]">
                     <div className="[margin-bottom:16px]">
@@ -4894,7 +4894,7 @@ export default function LandingPage() {
             {/* Footer */}
             <footer
                 id="footer"
-                className="[padding:56px_16px_32px] [background:#151515]"
+                className="[padding:28px_16px_28px] [background:#151515]"
             >
                 <div className="[margin:0_auto] [max-width:1152px]">
                     <div className="[margin-bottom:40px] [display:grid] [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))] [gap:40px]">
