@@ -527,7 +527,7 @@ export default function LandingPage() {
                             <img
                                 src="https://toefl.fullbrightindonesia.org/logo/Logo-Fullbright.webp"
                                 alt="Full Bright Indonesia"
-                                className="[height:auto] [width:160px] [object-fit:contain]"
+                                className="[height:auto] [width:160px] [max-width:40vw] [object-fit:contain]"
                             />
                         </a>
                         <TrackedCTA
@@ -536,7 +536,7 @@ export default function LandingPage() {
                             label="Amankan Seat"
                             href="#pricing"
                             onClick={scrollToPricing}
-                            className="[display:flex] [flex-direction:column] [justify-content:center] [gap:1px] [border-radius:9999px] [padding:7px_16px] [box-shadow:0_6px_16px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none]"
+                            className="[display:flex] [flex-direction:column] [justify-content:center] [gap:1px] [border-radius:9999px] [padding:7px_16px] [max-width:48vw] [box-shadow:0_6px_16px_rgba(215,8,8,0.35)] [background:#D70808] [text-decoration:none] max-[639px]:[padding:5px_10px] max-[639px]:[max-width:54vw]"
                         >
                             <span className="[font-size:13px] [line-height:1.2] [font-weight:800] [white-space:nowrap] [color:#fff]">
                                 🎓 Amankan Seat
