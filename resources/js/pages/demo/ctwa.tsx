@@ -216,6 +216,32 @@ const KEYFRAMES = `
   @keyframes heroBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
 `;
 
+function CanonicalUrl(): null {
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        try {
+            const url = new URL(window.location.href);
+            ['verify', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach((k) => {
+                url.searchParams.delete(k);
+            });
+            const clean = url.origin + url.pathname + (url.searchParams.toString() ? '?' + url.searchParams.toString() : '') + url.hash;
+            let link = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+            if (!link) {
+                link = document.createElement('link');
+                link.setAttribute('rel', 'canonical');
+                document.head.appendChild(link);
+            }
+            link.setAttribute('href', clean);
+            if (url.searchParams.toString() !== window.location.search.replace(/^\?/, '')) {
+                window.history.replaceState({}, '', clean);
+            }
+        } catch (_) {
+            // ignore
+        }
+    }, []);
+    return null;
+}
+
 export default function LandingPage() {
     const [scrolled, setScrolled] = useState<boolean>(false);
     const [bannerH, setBannerH] = useState<number>(38);
@@ -479,6 +505,7 @@ export default function LandingPage() {
     return (
         <>
             <Head title="Full Bright Indonesia | Persiapan TOEFL ITP" />
+            <CanonicalUrl />
             <style>{KEYFRAMES}</style>
 
             <div className="[min-height:100vh] [width:100%] [max-width:100%] [min-width:0] [overflow-x:clip] [font-family:Nunito,system-ui,sans-serif] [background:#fff]">
@@ -718,7 +745,7 @@ export default function LandingPage() {
                                                 dunia
                                             </p>
                                         </div>
-                                        <div className="[position:absolute] [top:12px] [right:0] [display:flex] [align-items:center] [gap:6px] [border-radius:16px] [padding:8px_12px] [box-shadow:0_8px_32px_rgba(0,0,0,0.12)] [background:#fff]">
+                                        <div className="[position:absolute] [top:64px] [right:0] [display:flex] [align-items:center] [gap:6px] [border-radius:16px] [padding:8px_12px] [box-shadow:0_8px_32px_rgba(0,0,0,0.12)] [background:#fff]">
                                             <span className="[color:#F59E0B]">
                                                 ★★★★★
                                             </span>
@@ -3186,6 +3213,7 @@ export default function LandingPage() {
                                             rel="noopener noreferrer"
                                             onClick={markCheckoutClicked}
                                             className="[box-sizing:border-box] [display:inline-flex] [width:100%] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:16px_20px] [font-size:16px] [font-weight:900] [color:#fff] [box-shadow:0_6px_24px_rgba(215,8,8,0.4)] [background:#D70808] [text-decoration:none]"
+                                            style={{ color: '#fff', background: '#D70808' }}
                                         >
                                             Mulai Belajar Mandiri →
                                         </TrackedCTA>
@@ -3509,6 +3537,7 @@ export default function LandingPage() {
                                             rel="noopener noreferrer"
                                             onClick={markCheckoutClicked}
                                             className="[box-sizing:border-box] [display:inline-flex] [width:100%] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:16px_20px] [font-size:16px] [font-weight:900] [color:#fff] [box-shadow:0_6px_24px_rgba(215,8,8,0.4)] [background:#D70808] [text-decoration:none]"
+                                            style={{ color: '#fff', background: '#D70808' }}
                                         >
                                             Apply Sekarang →
                                         </TrackedCTA>
@@ -3799,6 +3828,7 @@ export default function LandingPage() {
                                             rel="noopener noreferrer"
                                             onClick={markCheckoutClicked}
                                             className="[box-sizing:border-box] [display:inline-flex] [width:100%] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:16px_20px] [font-size:16px] [font-weight:900] [color:#fff] [box-shadow:0_6px_24px_rgba(22,163,74,0.4)] [background:#16a34a] [text-decoration:none]"
+                                            style={{ color: '#fff', background: '#16a34a' }}
                                         >
                                             Apply Sekarang →
                                         </TrackedCTA>
@@ -4027,6 +4057,7 @@ export default function LandingPage() {
                                             rel="noopener noreferrer"
                                             onClick={markCheckoutClicked}
                                             className="[box-sizing:border-box] [display:inline-flex] [width:100%] [align-items:center] [justify-content:center] [gap:8px] [border-radius:16px] [padding:16px_20px] [font-size:16px] [font-weight:900] [color:#fff] [box-shadow:0_6px_24px_rgba(215,8,8,0.4)] [background:#D70808] [text-decoration:none]"
+                                            style={{ color: '#fff', background: '#D70808' }}
                                         >
                                             Apply Sekarang →
                                         </TrackedCTA>
@@ -5156,7 +5187,7 @@ export default function LandingPage() {
             ) : null}
 
             {/* Floating WhatsApp */}
-            <div className="[position:fixed] [right:48px] [bottom:20px] [z-index:52] [display:flex] [flex-direction:column] [align-items:flex-end] [gap:10px] max-[500px]:[right:20px]">
+            <div className="[position:fixed] [right:48px] [bottom:80px] [z-index:52] [display:flex] [flex-direction:column] [align-items:flex-end] [gap:10px] max-[500px]:[right:16px] max-[500px]:[bottom:72px]">
                 {waBubbleOpen ? (
                     <>
                         <div className="[position:relative] [max-width:270px] [border-radius:18px_18px_6px_18px] [padding:14px_16px_14px_14px] [box-shadow:0_10px_34px_rgba(0,0,0,0.18)] [background:#fff] [border:1px_solid_#e5e7eb] max-[559px]:[max-width:208px] max-[559px]:[border-radius:14px_14px_5px_14px] max-[559px]:[padding:10px_12px_10px_11px]">
