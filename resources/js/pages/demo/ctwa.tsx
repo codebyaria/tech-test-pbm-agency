@@ -201,9 +201,13 @@ const gSideStyle = (side: 'prev' | 'next', gIdx: number): string => {
 };
 
 const KEYFRAMES = `
-  html, body, #app { width: 100%; max-width: 100%; overflow-x: clip; }
-  body { margin: 0; font-family: 'Nunito', system-ui, sans-serif; }
+  html, body, #app { width: 100%; max-width: 100vw; overflow-x: clip; -webkit-overflow-scrolling: touch; }
+  body { margin: 0; font-family: 'Nunito', system-ui, sans-serif; overflow-x: clip; max-width: 100vw; }
+  *, *::before, *::after { min-width: 0; box-sizing: border-box; }
+  img, video, iframe, svg { max-width: 100%; height: auto; }
+  section { max-width: 100vw; min-width: 0; overflow-x: clip; }
   h1, h2, h3, h4, h5, h6, p, span, div, li, a, button, input, select, textarea, ul, ol, strong, b, em, i, label { font-family: 'Nunito', system-ui, sans-serif; }
+  h1, h2, h3, h4, h5, h6, p { overflow-wrap: anywhere; word-break: break-word; }
   a { color: #D70808; }
   a:hover { color: #b30606; }
   @keyframes infiniteScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
