@@ -13,9 +13,6 @@ import { TrackedCTA } from '@/components/tracking/TrackedCTA';
 const WA_NUMBER = '6285255499299';
 const waUrl = (text: string): string =>
     `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
-const IPB_LOGO_URL =
-    'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEixYKuV2c5YoKDj9dHdJt5S1Lt-RSNZ0_3GgZbEbylP9emf5D9KGekhNq9RImhInYYgfcyOsyFFbDOdugmWwN2nWqxA2tDtJux26STvOi6BVFBM43oClQX5rK3aeIzbhUm_thZRVsKYxFgFJXa4AoumNIp5eBy3nYfzqgBpHIX_afCiFGRzAz-E_g/w320-h223/IPB%20University%20(Institut%20Pertanian%20Bogor)%20Logo.png';
-
 const FLASH_WINDOW_MS = 12 * 60 * 60 * 1000;
 function flashDeadline(): number {
     let start = Number(localStorage.getItem('fb_flash_start') || 0);
@@ -790,142 +787,6 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                {/* Social Proof Strip: Alumni Abroad */}
-                <div className="[overflow:hidden] [padding:32px_0] [background:#F3F3F3]">
-                    <p className="[margin:0_0_18px] [text-align:center] [font-size:12px] [font-weight:700] [letter-spacing:0.08em] [color:#9ca3af] [text-transform:uppercase]">
-                        Alumni Kami Sekarang Kuliah Di
-                    </p>
-                    <div className="[overflow:hidden] [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
-                        <div className="[display:flex] [width:max-content] [animation:infiniteScroll_30s_linear_infinite]">
-                            <div
-                                role="img"
-                                aria-label="Universitas Indonesia"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://www.monsoonsim.com/uploads/190972_f18baac4e23711d2723e0f822030a77919694fe0.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Institut Teknologi Bandung"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://upload.wikimedia.org/wikipedia/id/9/95/Logo_Institut_Teknologi_Bandung.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Universitas Gadjah Mada"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://iconlogovector.com/uploads/images/2024/11/lg-673f9e2f068ed-Universitas-Gadjah-Mada.webp)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="IPB University"
-                                style={{
-                                    backgroundImage: `url("${IPB_LOGO_URL}")`,
-                                }}
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Universitas Airlangga"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(/assets/unair.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Universitas Padjadjaran"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://www.unpad.ac.id/wp-content/uploads/2025/12/logo-unpad-duo.svg)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Institut Teknologi Sepuluh Nopember"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://katamata.wordpress.com/wp-content/uploads/2009/01/logo-its-biru-transparan.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Universitas Diponegoro"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://bauk.undip.ac.id/wp-content/uploads/2023/11/web-undip-logo-1.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="University of Nottingham"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://www.nottingham.ac.uk/Brand/LegacyAssets/images-multimedia/2022/Logos/BrandEvolution-NottinghamBlue.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Universität Stuttgart"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://upload.wikimedia.org/wikipedia/commons/c/cc/Universit%C3%A4t_Stuttgart_Logo.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Universitas Indonesia"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://www.monsoonsim.com/uploads/190972_f18baac4e23711d2723e0f822030a77919694fe0.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Institut Teknologi Bandung"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://upload.wikimedia.org/wikipedia/id/9/95/Logo_Institut_Teknologi_Bandung.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Universitas Gadjah Mada"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://iconlogovector.com/uploads/images/2024/11/lg-673f9e2f068ed-Universitas-Gadjah-Mada.webp)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="IPB University"
-                                style={{
-                                    backgroundImage: `url("${IPB_LOGO_URL}")`,
-                                }}
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Universitas Airlangga"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(/assets/unair.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Universitas Padjadjaran"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://www.unpad.ac.id/wp-content/uploads/2025/12/logo-unpad-duo.svg)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Institut Teknologi Sepuluh Nopember"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://katamata.wordpress.com/wp-content/uploads/2009/01/logo-its-biru-transparan.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Universitas Diponegoro"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://bauk.undip.ac.id/wp-content/uploads/2023/11/web-undip-logo-1.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="University of Nottingham"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://www.nottingham.ac.uk/Brand/LegacyAssets/images-multimedia/2022/Logos/BrandEvolution-NottinghamBlue.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-
-                            <div
-                                role="img"
-                                aria-label="Universität Stuttgart"
-                                className="[margin:0_20px] [height:64px] [width:110px] [flex-shrink:0] [background-image:url(https://upload.wikimedia.org/wikipedia/commons/c/cc/Universit%C3%A4t_Stuttgart_Logo.png)] [background-size:contain] [background-position:center] [background-repeat:no-repeat]"
-                            ></div>
-                        </div>
-                    </div>
-                </div>
-
                 {/* Problem / Agitation Section */}
                 <section
                     id="agitation"
@@ -1426,10 +1287,8 @@ export default function LandingPage() {
                         <h2 className="[margin:0_0_14px] [font-family:Nunito,sans-serif] [font-size:clamp(24px,3vw,36px)] [line-height:1.25] [font-weight:900] [color:#151515]">
                             Metode Kami Berhasil Membuat
                             <br />
-                            <span className="[color:#7c3aed]">
-                                <span className="[font-size:26.46px]">
-                                    Ribuan Alumni Kami Capai TOEFL 500+&nbsp;
-                                </span>
+                            <span className="[color:#d70808] [font-size:26.46px]">
+                                Ribuan Alumni Kami Capai TOEFL 500+&nbsp;
                             </span>
                         </h2>
 
@@ -1519,7 +1378,7 @@ export default function LandingPage() {
             {/* LMS Preview */}
             <section
                 id="lms"
-                className="[padding:210px_24px_190px] [background:#fff]"
+                className="[padding:80px_24px] [background:#fff]"
             >
                 <div className="[margin:0_auto] [max-width:1152px]">
                     <div className="[margin-bottom:48px] [text-align:center]">
@@ -4890,192 +4749,6 @@ export default function LandingPage() {
                     </p>
                 </div>
             </section>
-
-            {/* Footer */}
-            <footer
-                id="footer"
-                className="[padding:28px_16px_28px] [background:#151515]"
-            >
-                <div className="[margin:0_auto] [max-width:1152px]">
-                    <div className="[margin-bottom:40px] [display:grid] [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))] [gap:40px]">
-                        <div>
-                            <div className="[margin-bottom:16px]">
-                                <img
-                                    src="https://toefl.fullbrightindonesia.org/logo/Logo-Fullbright.webp"
-                                    alt="Full Bright Indonesia"
-                                    className="[height:auto] [width:160px] [object-fit:contain] [filter:brightness(0)_invert(1)]"
-                                />
-                            </div>
-                            <p className="[margin:0_0_16px] [font-size:12px] [line-height:1.6] [color:#9ca3af]">
-                                SK Kemenkumham RI No. AHU-0055720-AH.0114 Tahun
-                                2020
-                                <br />
-                                SK LKP No. 503/20177/LKP/DPM-PTSP/8/2024
-                                <br />
-                                NPSN K9998700 · Kerjasama dengan IIEF Jakarta
-                            </p>
-                            <div className="[display:flex] [gap:12px]">
-                                <a
-                                    href="https://www.instagram.com/fulbrightindonesia/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label="Instagram"
-                                    className="[display:flex] [height:36px] [width:36px] [align-items:center] [justify-content:center] [border-radius:12px] [color:#9ca3af] [background:rgba(255,255,255,0.08)] [text-decoration:none]"
-                                >
-                                    <svg
-                                        width="17"
-                                        height="17"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor"
-                                    >
-                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <p className="[margin:0_0_20px] [font-size:12px] [font-weight:900] [letter-spacing:0.08em] [color:#6b7280] [text-transform:uppercase]">
-                                Navigasi
-                            </p>
-                            <ul className="[margin:0] [display:flex] [flex-direction:column] [gap:12px] [padding:0] [list-style:none]">
-                                <li>
-                                    <a
-                                        href="#value"
-                                        className="[font-size:14px] [color:#9ca3af] [text-decoration:none]"
-                                    >
-                                        Keunggulan
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#testimonials"
-                                        className="[font-size:14px] [color:#9ca3af] [text-decoration:none]"
-                                    >
-                                        Testimoni
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#pricing"
-                                        onClick={scrollToPricing}
-                                        className="[font-size:14px] [color:#9ca3af] [text-decoration:none]"
-                                    >
-                                        Harga
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#faq"
-                                        className="[font-size:14px] [color:#9ca3af] [text-decoration:none]"
-                                    >
-                                        FAQ
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <p className="[margin:0_0_20px] [font-size:12px] [font-weight:900] [letter-spacing:0.08em] [color:#6b7280] [text-transform:uppercase]">
-                                Hubungi Kami
-                            </p>
-                            <ul className="[margin:0] [display:flex] [flex-direction:column] [gap:16px] [padding:0] [list-style:none]">
-                                <li className="[display:flex] [align-items:flex-start] [gap:12px]">
-                                    <div className="[margin-top:2px] [display:flex] [height:32px] [width:32px] [flex-shrink:0] [align-items:center] [justify-content:center] [border-radius:8px] [color:#9ca3af] [background:rgba(255,255,255,0.08)]">
-                                        💬
-                                    </div>
-                                    <div>
-                                        <p className="[margin:0_0_2px] [font-size:12px] [font-weight:600] [color:#fff]">
-                                            Ms. Aini
-                                        </p>
-                                        <a
-                                            href="https://wa.me/6281959486507"
-                                            className="[font-size:12px] [color:#9ca3af] [text-decoration:none]"
-                                        >
-                                            +62 819-5948-6507
-                                        </a>
-                                    </div>
-                                </li>
-
-                                <li className="[display:flex] [align-items:flex-start] [gap:12px]">
-                                    <div className="[margin-top:2px] [display:flex] [height:32px] [width:32px] [flex-shrink:0] [align-items:center] [justify-content:center] [border-radius:8px] [color:#9ca3af] [background:rgba(255,255,255,0.08)]">
-                                        💬
-                                    </div>
-                                    <div>
-                                        <p className="[margin:0_0_2px] [font-size:12px] [font-weight:600] [color:#fff]">
-                                            Mr. Choiri
-                                        </p>
-                                        <a
-                                            href="https://wa.me/6288744875322"
-                                            className="[font-size:12px] [color:#9ca3af] [text-decoration:none]"
-                                        >
-                                            +62 887-4487-5322
-                                        </a>
-                                    </div>
-                                </li>
-
-                                <li className="[display:flex] [align-items:flex-start] [gap:12px]">
-                                    <div className="[margin-top:2px] [display:flex] [height:32px] [width:32px] [flex-shrink:0] [align-items:center] [justify-content:center] [border-radius:8px] [color:#9ca3af] [background:rgba(255,255,255,0.08)]">
-                                        💬
-                                    </div>
-                                    <div>
-                                        <p className="[margin:0_0_2px] [font-size:12px] [font-weight:600] [color:#fff]">
-                                            Ms. Fini
-                                        </p>
-                                        <a
-                                            href="https://wa.me/6285255499299"
-                                            className="[font-size:12px] [color:#9ca3af] [text-decoration:none]"
-                                        >
-                                            +62 852-5549-9299
-                                        </a>
-                                    </div>
-                                </li>
-
-                                <li className="[display:flex] [align-items:flex-start] [gap:12px]">
-                                    <div className="[margin-top:2px] [display:flex] [height:32px] [width:32px] [flex-shrink:0] [align-items:center] [justify-content:center] [border-radius:8px] [color:#9ca3af] [background:rgba(255,255,255,0.08)]">
-                                        ✉
-                                    </div>
-                                    <div>
-                                        <p className="[margin:0_0_2px] [font-size:12px] [font-weight:600] [color:#fff]">
-                                            Email
-                                        </p>
-                                        <a
-                                            href="mailto:info@fullbrightindonesia.org"
-                                            className="[font-size:12px] [color:#9ca3af] [text-decoration:none]"
-                                        >
-                                            info@fullbrightindonesia.org
-                                        </a>
-                                    </div>
-                                </li>
-                                <li className="[display:flex] [align-items:flex-start] [gap:12px]">
-                                    <div className="[margin-top:2px] [display:flex] [height:32px] [width:32px] [flex-shrink:0] [align-items:center] [justify-content:center] [border-radius:8px] [color:#9ca3af] [background:rgba(255,255,255,0.08)]">
-                                        📍
-                                    </div>
-                                    <div>
-                                        <p className="[margin:0_0_2px] [font-size:12px] [font-weight:600] [color:#fff]">
-                                            Alamat
-                                        </p>
-                                        <p className="[margin:0] [font-size:12px] [color:#9ca3af]">
-                                            Gedung Yotta Signature Perintis, Jl.
-                                            Perintis Kemerdekaan No.97 Lantai 3,
-                                            Tamalanrea Jaya, Kec. Tamalanrea,
-                                            Kota Makassar, Sulawesi Selatan
-                                            90245
-                                        </p>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div className="[display:flex] [justify-content:center] [padding-top:24px] [font-size:12px] [color:#6b7280] [border-top:1px_solid_rgba(255,255,255,0.08)]">
-                        <p className="[margin:0]">
-                            © 2026 Full Bright Indonesia. Lembaga Resmi TOEFL
-                            ITP bekerjasama dengan IIEF Jakarta.
-                        </p>
-                    </div>
-                </div>
-            </footer>
 
             {/* Return-to-checkout survey bottom sheet */}
             {rpOpen ? (
