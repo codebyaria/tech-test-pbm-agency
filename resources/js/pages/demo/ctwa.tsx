@@ -929,7 +929,7 @@ export default function LandingPage() {
                 {/* Problem / Agitation Section */}
                 <section
                     id="agitation"
-                    className="[padding:8px_24px] [background:#F3F3F3]"
+                    className="[padding:56px_24px] [background:#F3F3F3]"
                 >
                     <div className="[margin:0_auto] [max-width:672px]">
                         <div className="[margin-bottom:24px] [text-align:center]">
@@ -4139,7 +4139,7 @@ export default function LandingPage() {
             {/* FAQ */}
             <section
                 id="faq"
-                className="[padding:48px_24px_48px] [background:#F3F3F3]"
+                className="[padding:80px_24px_48px] [background:#F3F3F3]"
             >
                 <div className="[margin:0_auto] [max-width:1152px]">
                     <div className="[margin-bottom:56px] [text-align:left]">
@@ -4804,7 +4804,7 @@ export default function LandingPage() {
             {/* Survey */}
             <section
                 id="survey"
-                className="[padding:20px_24px_12px] [background:#fff]"
+                className="[padding:28px_24px] [background:#fff]"
             >
                 <div className="[margin:0_auto] [max-width:460px] [border-radius:16px] [padding:20px_20px_16px] [background:#FAFAFA] [border:1px_solid_#ececec]">
                     <div className="[margin-bottom:16px]">
